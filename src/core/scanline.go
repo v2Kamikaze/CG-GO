@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -86,8 +87,10 @@ func Scanline(screen *ebiten.Image, s *GeometricShape) {
 
 				c := InterpolateColors(HexToRGBA(startColor), HexToRGBA(endColor), smoothRatio)
 				DrawPixel(screen, xk, y, c)
+				fmt.Printf("x: %d | y: %d | color: %x | ratio: %f\n", xk, y, c, smoothRatio)
 			}
 		}
+
 	}
 
 }

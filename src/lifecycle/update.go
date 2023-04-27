@@ -10,7 +10,7 @@ var pol = &core.GeometricShape{
 	Vertices: [][]uint32{
 		{5, 5, core.Blue},
 		{50, 50, core.Red},
-		{5, 50, core.Blue},
+		{5, 50, core.Red},
 	},
 }
 
