@@ -1,4 +1,4 @@
-package core
+package scan
 
 func Intersection(scan int, seg [][]int) (float64, float64) {
 	xi := float64(seg[0][0])

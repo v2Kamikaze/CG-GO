@@ -1,12 +1,16 @@
-package core
+package transform
 
-import "math"
+import (
+	"cg-go/src/core/matrix"
+	"cg-go/src/shapes"
+	"math"
+)
 
 func TranslatePoint(translateMat [][]uint32, point []uint32) []uint32 {
 
-	pointTransposed := Transpose1D([]uint32{point[0], point[1], 1})
+	pointTransposed := matrix.Transpose1D([]uint32{point[0], point[1], 1})
 
-	newPointTransposed := MatrixMult(translateMat, pointTransposed)
+	newPointTransposed := matrix.MatrixMult(translateMat, pointTransposed)
 	rawPoint := []uint32{}
 
 	for _, row := range newPointTransposed {
@@ -22,7 +26,7 @@ func TranslatePoint(translateMat [][]uint32, point []uint32) []uint32 {
 	return newPoint
 }
 
-func TranslatePolygon(dx, dy int, shape *GeometricShape) {
+func TranslatePolygon(dx, dy int, shape *shapes.GeometricShape) {
 	translateMat := [][]uint32{
 		{1, 0, uint32(dx)},
 		{0, 1, uint32(dy)},

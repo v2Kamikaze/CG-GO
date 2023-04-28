@@ -1,4 +1,4 @@
-package core
+package pixel
 
 import (
 	"image/color"

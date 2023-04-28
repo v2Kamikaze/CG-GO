@@ -1,4 +1,4 @@
-package core
+package matrix
 
 func MatrixMult[T float64 | uint32](a [][]T, b [][]T) [][]T {
 	numRowsA := len(a)

@@ -1,4 +1,4 @@
-package core
+package colors
 
 const (
 	Black  = 0xff000000

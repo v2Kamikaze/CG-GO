@@ -1,11 +1,16 @@
-package core
+package transform
+
+import (
+	"cg-go/src/core/matrix"
+	"cg-go/src/shapes"
+)
 
 func ScalePoint(scaleMat [][]float64, point []uint32) []uint32 {
 	x := float64(point[0])
 	y := float64(point[1])
 
-	pointTransposed := Transpose1D([]float64{x, y, 1})
-	newPointTransposed := MatrixMult(scaleMat, pointTransposed)
+	pointTransposed := matrix.Transpose1D([]float64{x, y, 1})
+	newPointTransposed := matrix.MatrixMult(scaleMat, pointTransposed)
 	rawPoint := make([]uint32, 3)
 
 	for i, row := range newPointTransposed {
@@ -22,7 +27,7 @@ func ScalePoint(scaleMat [][]float64, point []uint32) []uint32 {
 	return newPoint
 }
 
-func ScalePolygon(sx, sy float64, shape *GeometricShape) {
+func ScalePolygon(sx, sy float64, shape *shapes.GeometricShape) {
 	x, y := float64(shape.Vertices[0][0]), float64(shape.Vertices[0][1])
 
 	translateMatForward := [][]float64{
@@ -43,7 +48,7 @@ func ScalePolygon(sx, sy float64, shape *GeometricShape) {
 		{0, 0, 1},
 	}
 
-	scaleMat := MatrixMult(MatrixMult(translateMatForward, rawScaleMat), translateMatBack)
+	scaleMat := matrix.MatrixMult(matrix.MatrixMult(translateMatForward, rawScaleMat), translateMatBack)
 
 	scaled := make([][]uint32, len(shape.Vertices))
 

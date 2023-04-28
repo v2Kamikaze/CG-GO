@@ -1,7 +1,9 @@
-package core
+package scan
 
 import (
-	"fmt"
+	"cg-go/src/core/colors"
+	"cg-go/src/core/pixel"
+	"cg-go/src/shapes"
 	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -13,7 +15,7 @@ type ScanlinePointType struct {
 	Hex uint32
 }
 
-func Scanline(screen *ebiten.Image, s *GeometricShape) {
+func Scanline(screen *ebiten.Image, s *shapes.GeometricShape) {
 	if len(s.Vertices) < 3 {
 		return
 	}
@@ -85,9 +87,9 @@ func Scanline(screen *ebiten.Image, s *GeometricShape) {
 				ratio := float64(xk-x1) / float64(x2-x1)
 				smoothRatio := t1 + (t2-t1)*ratio
 
-				c := InterpolateColors(HexToRGBA(startColor), HexToRGBA(endColor), smoothRatio)
-				DrawPixel(screen, xk, y, c)
-				fmt.Printf("x: %d | y: %d | color: %x | ratio: %f\n", xk, y, c, smoothRatio)
+				c := colors.InterpolateColors(colors.HexToRGBA(startColor), colors.HexToRGBA(endColor), smoothRatio)
+				pixel.DrawPixel(screen, xk, y, c)
+				//fmt.Printf("x: %d | y: %d | color: %x | ratio: %f\n", xk, y, c, smoothRatio)
 			}
 		}
 

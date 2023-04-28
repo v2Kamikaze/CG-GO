@@ -21,7 +21,7 @@ func (g *window) Draw(screen *ebiten.Image) {
 }
 
 func (g *window) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return 300, 300
+	return 400, 300
 }
 
 func Run(update func(screen *ebiten.Image)) {

@@ -1,4 +1,4 @@
-package core
+package matrix
 
 func Transpose1D[T uint32 | float64](a []T) [][]T {
 	transposed := make([][]T, len(a))
