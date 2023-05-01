@@ -71,24 +71,24 @@ func Scanline(screen *ebiten.Image, s *shapes.GeometricShape) {
 		// ordenando os valores baseados na posição xi calculada
 		for pi := 0; pi < len(i); pi += 2 {
 			x1 := i[pi].Xi
-			t1 := i[pi].T
-			startColor := i[pi].Hex
+			//t1 := i[pi].T
+			//startColor := i[pi].Hex
 			x2 := i[pi+1].Xi
-			t2 := i[pi+1].T
-			endColor := i[pi+1].Hex
+			//t2 := i[pi+1].T
+			//endColor := i[pi+1].Hex
 
 			if x2 < x1 {
 				x1, x2 = x2, x1
-				t1, t2 = t2, t1
-				startColor, endColor = endColor, startColor
+				//t1, t2 = t2, t1
+				//startColor, endColor = endColor, startColor
 			}
 
 			for xk := x1; xk <= x2; xk++ {
-				ratio := float64(xk-x1) / float64(x2-x1)
-				smoothRatio := t1 + (t2-t1)*ratio
+				/* 	ratio := float64(xk-x1) / float64(x2-x1)
+				smoothRatio := t1 + (t2-t1)*ratio */
 
-				c := colors.InterpolateColors(colors.HexToRGBA(startColor), colors.HexToRGBA(endColor), smoothRatio)
-				pixel.DrawPixel(screen, xk, y, c)
+				//c := colors.InterpolateColors(colors.HexToRGBA(startColor), colors.HexToRGBA(endColor), smoothRatio)
+				pixel.DrawPixel(screen, xk, y, colors.HexToRGBA(colors.Silver))
 				//fmt.Printf("x: %d | y: %d | color: %x | ratio: %f\n", xk, y, c, smoothRatio)
 			}
 		}

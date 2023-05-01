@@ -14,24 +14,26 @@ import (
 var pol = &shapes.GeometricShape{
 	Vertices: [][]uint32{
 		{5, 5, colors.Blue},
-		{300, 300, colors.Red},
-		{5, 300, colors.Red},
+		{50, 50, colors.Red},
+		{5, 50, colors.Red},
 	},
 }
 
-var img, _ = image.ReadImage("./teste.jpg")
+var img, _ = image.ReadImage("./resources/teste.jpg")
+var pos = 50
 
 func Update(screen *ebiten.Image) {
 	screen.Clear()
 
 	for i := range img {
 		for j := range img[i] {
-			pixel.DrawPixel(screen, j+50, i+50, img[i][j])
+			pixel.DrawPixel(screen, j+pos, i+pos, img[i][j])
 		}
 
 	}
 
 	scan.Scanline(screen, pol)
+	pol.DrawMesh(screen)
 
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
 		transform.TranslatePolygon(2, 0, pol)
@@ -53,8 +55,4 @@ func Update(screen *ebiten.Image) {
 		scan.Scanline(screen, pol)
 	}
 
-	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
-		transform.ScalePolygon(1.05, 1.05, pol)
-		scan.Scanline(screen, pol)
-	}
 }
