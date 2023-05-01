@@ -7,6 +7,7 @@ import (
 )
 
 func DrawPixel(screen *ebiten.Image, x, y int, color color.RGBA) {
+
 	if x > screen.Bounds().Max.X {
 		x = screen.Bounds().Max.X
 	}

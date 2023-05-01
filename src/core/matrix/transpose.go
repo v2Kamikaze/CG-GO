@@ -1,6 +1,6 @@
 package matrix
 
-func Transpose1D[T uint32 | float64](a []T) [][]T {
+func Transpose1D[T uint32 | float64 | int](a []T) [][]T {
 	transposed := make([][]T, len(a))
 	for i, e := range a {
 		transposed[i] = []T{e}
