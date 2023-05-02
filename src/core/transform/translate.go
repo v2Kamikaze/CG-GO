@@ -1,37 +1,32 @@
 package transform
 
-/*
-func TranslatePoint(translateMat [][]uint32, point []uint32) []uint32 {
+import (
+	"cg-go/src/core/matrix"
+	"cg-go/src/core/vec"
+	"cg-go/src/shapes"
+)
 
-	pointTransposed := matrix.Transpose1D([]uint32{point[0], point[1], 1})
-
-	newPointTransposed := matrix.MatrixMult(translateMat, pointTransposed)
-	rawPoint := []uint32{}
-
-	for _, row := range newPointTransposed {
-		rawPoint = append(rawPoint, row...)
-	}
-
-	newPoint := []uint32{0, 0, point[2]}
-	x, y := float64(rawPoint[0]), float64(rawPoint[1])
-
-	newPoint[0] = uint32(math.Round(x))
-	newPoint[1] = uint32(math.Round(y))
-
-	return newPoint
+func TranslatePoint(mtx [][]int, point vec.Vec2D) vec.Vec2D {
+	pointTranslated := matrix.MatrixMult(mtx, point.ToTransposedXY1())
+	return vec.NewVec2D(pointTranslated[0][0], pointTranslated[1][0])
 }
 
-func TranslatePolygon(dx, dy int, shape *shapes.GeometricShape) {
-	translateMat := [][]uint32{
-		{1, 0, uint32(dx)},
-		{0, 1, uint32(dy)},
+func NewTranslateMatrix[T int | float64](dx, dy T) [][]T {
+	return [][]T{
+		{1, 0, dx},
+		{0, 1, dy},
 		{0, 0, 1},
 	}
+}
 
-	var translated [][]uint32
+func TranslateVertices(dx, dy int, shape *shapes.GeometricShape) {
+	translateMat := NewTranslateMatrix(dx, dy)
+
+	var translated []vec.Vec2D
+
 	for _, point := range shape.Vertices {
 		translated = append(translated, TranslatePoint(translateMat, point))
 	}
+
 	shape.Vertices = translated
 }
-*/

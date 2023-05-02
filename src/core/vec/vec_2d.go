@@ -23,3 +23,15 @@ func Zeros() Vec2D {
 func Ones() Vec2D {
 	return Vec2D{1, 1}
 }
+
+func (v Vec2D) ToXYZ() []int {
+	return []int{v.X, v.Y, 1}
+}
+
+func (v Vec2D) ToTransposedXY1() [][]int {
+	return [][]int{{v.X}, {v.Y}, {1}}
+}
+
+func (v Vec2D) ToTransposedFXY1() [][]float64 {
+	return [][]float64{{float64(v.X)}, {float64(v.Y)}, {1}}
+}

@@ -4,8 +4,10 @@ import (
 	"cg-go/src/core/colors"
 	"cg-go/src/core/image"
 	"cg-go/src/core/scan"
+	"cg-go/src/core/transform"
 	"cg-go/src/core/vec"
 	"cg-go/src/shapes"
+	"fmt"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -14,8 +16,8 @@ import (
 var polImg = &shapes.GeometricShape{
 	Vertices: []vec.Vec2D{
 		vec.NewVec2D(0, 0),
-		vec.NewVec2D(400, 0),
-		vec.NewVec2D(380, 200),
+		vec.NewVec2D(200, 0),
+		vec.NewVec2D(180, 200),
 		vec.NewVec2D(50, 200),
 	},
 
@@ -37,26 +39,25 @@ var triangle = &shapes.GeometricShape{
 
 var square = &shapes.GeometricShape{
 	Vertices: []vec.Vec2D{
+		vec.NewVec2D(300, 300),
+		vec.NewVec2D(400, 300),
 		vec.NewVec2D(400, 400),
-		vec.NewVec2D(1000, 400),
-		vec.NewVec2D(1000, 600),
-		vec.NewVec2D(400, 600),
+		vec.NewVec2D(300, 400),
 	},
 	ColorVertices: []color.RGBA{
-		colors.HexToRGBA(colors.Purple),
-		colors.HexToRGBA(colors.Yellow),
 		colors.HexToRGBA(colors.Yellow),
 		colors.HexToRGBA(colors.Purple),
+		colors.HexToRGBA(colors.Purple),
+		colors.HexToRGBA(colors.Yellow),
 	},
 }
 
 var img, _ = image.ReadImage("./resources/cat.jpg")
 
+const velocity = 5
+
 func Update(screen *ebiten.Image) {
 	screen.Clear()
-
-	scan.ScanlineTexture(screen, polImg, img)
-	polImg.DrawMesh(screen)
 
 	scan.ScanlineBasic(screen, triangle, colors.HexToRGBA(colors.Teal))
 	triangle.DrawMesh(screen)
@@ -64,4 +65,39 @@ func Update(screen *ebiten.Image) {
 	scan.ScanlineGradient(screen, square)
 	square.DrawMesh(screen)
 
+	scan.ScanlineTexture(screen, polImg, img)
+	polImg.DrawMesh(screen)
+
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		transform.ScaleVertices(1.01, 1.01, polImg)
+		scan.ScanlineTexture(screen, polImg, img)
+		polImg.DrawMesh(screen)
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyA) {
+		transform.TranslateVertices(-velocity, 0, polImg)
+		scan.ScanlineTexture(screen, polImg, img)
+		polImg.DrawMesh(screen)
+
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyD) {
+		transform.TranslateVertices(velocity, 0, polImg)
+		scan.ScanlineTexture(screen, polImg, img)
+		polImg.DrawMesh(screen)
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyW) {
+		transform.TranslateVertices(0, -velocity, polImg)
+		scan.ScanlineTexture(screen, polImg, img)
+		polImg.DrawMesh(screen)
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyS) {
+		transform.TranslateVertices(0, velocity, polImg)
+		scan.ScanlineTexture(screen, polImg, img)
+		polImg.DrawMesh(screen)
+	}
+
+	fmt.Printf("\rFPS: %.2f", ebiten.ActualFPS())
 }

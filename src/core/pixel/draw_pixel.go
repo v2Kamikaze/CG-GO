@@ -12,16 +12,16 @@ func DrawPixel(screen *ebiten.Image, x, y int, color color.RGBA) {
 		x = screen.Bounds().Max.X
 	}
 
-	if x < 0 {
-		x = 0
+	if x < screen.Bounds().Min.X {
+		x = screen.Bounds().Min.X
 	}
 
 	if y > screen.Bounds().Max.Y {
 		y = screen.Bounds().Max.Y
 	}
 
-	if y < 0 {
-		y = 0
+	if y < screen.Bounds().Min.Y {
+		y = screen.Bounds().Min.Y
 	}
 
 	screen.Set(x, y, color)

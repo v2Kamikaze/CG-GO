@@ -1,62 +1,36 @@
 package transform
 
-/*
 import (
 	"cg-go/src/core/matrix"
+	"cg-go/src/core/vec"
 	"cg-go/src/shapes"
+	"math"
 )
 
-func ScalePoint(scaleMat [][]float64, point []uint32) []uint32 {
-	x := float64(point[0])
-	y := float64(point[1])
-
-	pointTransposed := matrix.Transpose1D([]float64{x, y, 1})
-	newPointTransposed := matrix.MatrixMult(scaleMat, pointTransposed)
-	rawPoint := make([]uint32, 3)
-
-	for i, row := range newPointTransposed {
-		rawPoint[i] = uint32(row[0])
-	}
-
-	newPoint := make([]uint32, len(point))
-	xn, yn := rawPoint[0], rawPoint[1]
-
-	newPoint[0] = xn
-	newPoint[1] = yn
-	newPoint[2] = point[2] // Cor do ponto
-
-	return newPoint
+func NewScaleMatrix(sx, sy float64) [][]float64 {
+	return [][]float64{{sx, 0, 0}, {0, sy, 0}, {0, 0, 1}}
 }
 
-func ScalePolygon(sx, sy float64, shape *shapes.GeometricShape) {
-	x, y := float64(shape.Vertices[0][0]), float64(shape.Vertices[0][1])
-
-	translateMatForward := [][]float64{
-		{1, 0, x},
-		{0, 1, y},
-		{0, 0, 1},
-	}
-
-	translateMatBack := [][]float64{
-		{1, 0, -x},
-		{0, 1, -y},
-		{0, 0, 1},
-	}
-
-	rawScaleMat := [][]float64{
-		{sx, 0, 0},
-		{0, sy, 0},
-		{0, 0, 1},
-	}
-
-	scaleMat := matrix.MatrixMult(matrix.MatrixMult(translateMatForward, rawScaleMat), translateMatBack)
-
-	scaled := make([][]uint32, len(shape.Vertices))
-
-	for i, point := range shape.Vertices {
-		scaled[i] = ScalePoint(scaleMat, point)
-	}
-
-	shape.Vertices = scaled
+func NewScaledTranslatedMatrix(dx, dy, sx, sy float64) [][]float64 {
+	translateMatForward := NewTranslateMatrix(dx, dy)
+	translateMatBack := NewTranslateMatrix(-dx, -dy)
+	rawScaleMat := NewScaleMatrix(sx, sy)
+	return matrix.MatrixMult(matrix.MatrixMult(translateMatForward, rawScaleMat), translateMatBack)
 }
-*/
+
+func ScalePoint(mtx [][]float64, point vec.Vec2D) vec.Vec2D {
+	pointScaled := matrix.MatrixMult(mtx, point.ToTransposedFXY1())
+	return vec.NewVec2D(int(math.Round(pointScaled[0][0])), int(math.Round(pointScaled[1][0])))
+}
+
+func ScaleVertices(sx, sy float64, s *shapes.GeometricShape) {
+	mtx := NewScaledTranslatedMatrix(float64(s.Vertices[0].X), float64(s.Vertices[0].Y), sx, sy)
+
+	var scaled []vec.Vec2D
+
+	for _, point := range s.Vertices {
+		scaled = append(scaled, ScalePoint(mtx, point))
+	}
+
+	s.Vertices = scaled
+}
