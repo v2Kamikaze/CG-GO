@@ -1,11 +1,6 @@
 package transform
 
-import (
-	"cg-go/src/core/matrix"
-	"cg-go/src/shapes"
-	"math"
-)
-
+/*
 func TranslatePoint(translateMat [][]uint32, point []uint32) []uint32 {
 
 	pointTransposed := matrix.Transpose1D([]uint32{point[0], point[1], 1})
@@ -39,3 +34,4 @@ func TranslatePolygon(dx, dy int, shape *shapes.GeometricShape) {
 	}
 	shape.Vertices = translated
 }
+*/

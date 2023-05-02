@@ -7,8 +7,8 @@ import (
 
 func main() {
 	window.NewWindow().
-		SetHeight(400).
-		SetWidth(300).
+		SetWidth(1240).
+		SetHeight(860).
 		SetTitle("Term").
 		SetOnUpdate(render.Update).
 		Run()

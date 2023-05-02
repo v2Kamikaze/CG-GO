@@ -2,13 +2,16 @@ package shapes
 
 import (
 	"cg-go/src/core/pixel"
+	"cg-go/src/core/vec"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type GeometricShape struct {
-	Vertices [][]uint32
+	Vertices        []vec.Vec2D
+	ColorVertices   []color.RGBA
+	TextureVertices []vec.VecTexture
 }
 
 func (s *GeometricShape) DrawMesh(screen *ebiten.Image) {
@@ -16,16 +19,16 @@ func (s *GeometricShape) DrawMesh(screen *ebiten.Image) {
 		return
 	}
 
-	xi := int(s.Vertices[0][0])
-	yi := int(s.Vertices[0][1])
+	xi := s.Vertices[0].X
+	yi := s.Vertices[0].Y
 	for i := 1; i < len(s.Vertices); i++ {
-		xf := int(s.Vertices[i][0])
-		yf := int(s.Vertices[i][1])
+		xf := s.Vertices[i].X
+		yf := s.Vertices[i].Y
 		pixel.DrawLine(screen, xi, yi, xf, yf, color.RGBA{255, 255, 255, 255})
 		xi = xf
 		yi = yf
 	}
-	xf := int(s.Vertices[0][0])
-	yf := int(s.Vertices[0][1])
+	xf := s.Vertices[0].X
+	yf := s.Vertices[0].Y
 	pixel.DrawLine(screen, xi, yi, xf, yf, color.RGBA{255, 255, 255, 255})
 }

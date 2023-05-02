@@ -4,7 +4,6 @@ import (
 	"cg-go/src/core/colors"
 	"cg-go/src/core/pixel"
 	"cg-go/src/shapes"
-	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -19,50 +18,45 @@ func ScanlineGradient(screen *ebiten.Image, s *shapes.GeometricShape) {
 	for y := ymin; y <= ymax; y++ {
 		var i []ScanlinePointGradient
 
-		pix := int(s.Vertices[0][0])
-		piy := int(s.Vertices[0][1])
+		pi := s.Vertices[0]
+		lastColor := s.ColorVertices[0]
 
 		for p := 1; p < len(s.Vertices); p++ {
-			pfx, pfy, hex := int(s.Vertices[p][0]), int(s.Vertices[p][1]), s.Vertices[p][2]
+			pf := s.Vertices[p]
+			currenColor := s.ColorVertices[p]
 
-			xPoint, t := Intersection(y, [2][2]int{{(pix), (piy)}, {(pfx), (pfy)}})
+			point := Intersection(y, pi, pf)
 
-			xi := int(math.Round(xPoint))
-
-			if xi >= 0 {
-				i = append(i, NewScanlinePointGradient(xi, t, hex))
+			if point.X >= 0 {
+				colorInterpolated := colors.InterpolateColors(lastColor, currenColor, point.T)
+				i = append(i, NewScanlinePointGradient(point.X, point.T, colorInterpolated))
 			}
 
-			pix, piy = pfx, pfy
+			pi, pf, lastColor = pf, pi, currenColor
 		}
 
-		lastPix, lastPiy, hex := int(s.Vertices[0][0]), int(s.Vertices[0][1]), s.Vertices[0][2]
-		pfx, pfy := lastPix, lastPiy
+		pf, currentColor := s.Vertices[0], s.ColorVertices[0]
 
-		xPoint, t := Intersection(y, [2][2]int{{(pix), (piy)}, {(pfx), (pfy)}})
+		point := Intersection(y, pi, pf)
 
-		xi := int(math.Round(xPoint))
-
-		if xi >= 0 {
-			i = append(i, NewScanlinePointGradient(xi, t, hex))
+		if point.X >= 0 {
+			colorInterpolated := colors.InterpolateColors(lastColor, currentColor, point.T)
+			i = append(i, NewScanlinePointGradient(point.X, point.T, colorInterpolated))
 		}
 
-		// ordenando os valores baseados na posição xi calculada
 		for pi := 0; pi < len(i); pi += 2 {
-			x1, t1, startColor := i[pi].Xi, i[pi].T, i[pi].Hex
-			x2, t2, endColor := i[pi+1].Xi, i[pi+1].T, i[pi+1].Hex
+			x1, startColor := i[pi].X, i[pi].Color
+			x2, endColor := i[pi+1].X, i[pi+1].Color
 
 			if x2 < x1 {
 				x1, x2 = x2, x1
-				t1, t2 = t2, t1
 				startColor, endColor = endColor, startColor
 			}
 
 			for xk := x1; xk <= x2; xk++ {
 				ratio := float64(xk-x1) / float64(x2-x1)
-				smoothRatio := t1 + (t2-t1)*ratio
 
-				c := colors.InterpolateColors(colors.HexToRGBA(startColor), colors.HexToRGBA(endColor), smoothRatio)
+				c := colors.InterpolateColors(startColor, endColor, ratio)
 				pixel.DrawPixel(screen, xk, y, c)
 			}
 		}

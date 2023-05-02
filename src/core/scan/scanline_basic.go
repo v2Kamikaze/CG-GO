@@ -4,7 +4,6 @@ import (
 	"cg-go/src/core/pixel"
 	"cg-go/src/shapes"
 	"image/color"
-	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -19,32 +18,26 @@ func ScanlineBasic(screen *ebiten.Image, s *shapes.GeometricShape, color color.R
 	for y := ymin; y <= ymax; y++ {
 		var i []int
 
-		pix := int(s.Vertices[0][0])
-		piy := int(s.Vertices[0][1])
+		pi := s.Vertices[0]
 
 		for p := 1; p < len(s.Vertices); p++ {
-			pfx, pfy := int(s.Vertices[p][0]), int(s.Vertices[p][1])
+			pf := s.Vertices[p]
 
-			xPoint, _ := Intersection(y, [2][2]int{{(pix), (piy)}, {(pfx), (pfy)}})
+			point := Intersection(y, pi, pf)
 
-			xi := int(math.Round(xPoint))
-
-			if xi >= 0 {
-				i = append(i, xi)
+			if point.X >= 0 {
+				i = append(i, point.X)
 			}
 
-			pix, piy = pfx, pfy
+			pi, pf = pf, pi
 		}
 
-		lastPix, lastPiy := int(s.Vertices[0][0]), int(s.Vertices[0][1])
-		pfx, pfy := lastPix, lastPiy
+		pf := s.Vertices[0]
 
-		xPoint, _ := Intersection(y, [2][2]int{{(pix), (piy)}, {(pfx), (pfy)}})
+		point := Intersection(y, pi, pf)
 
-		xi := int(math.Round(xPoint))
-
-		if xi >= 0 {
-			i = append(i, xi)
+		if point.X >= 0 {
+			i = append(i, point.X)
 		}
 
 		for pi := 0; pi < len(i); pi += 2 {

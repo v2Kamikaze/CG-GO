@@ -20,22 +20,26 @@ func ScanlineTexture(screen *ebiten.Image, s *shapes.GeometricShape, texture [][
 		var intersections []ScanlinePointTexture
 
 		pi := s.Vertices[0]
+		tPi := s.TextureVertices[0]
 
 		for p := 1; p < len(s.Vertices); p++ {
 			pf := s.Vertices[p]
+			tPf := s.TextureVertices[p]
 
-			point := IntersectionForTexture(y, [][]uint32{pi, pf})
+			point := IntersectionForTexture(y, pi, pf, tPi, tPf)
 
 			if point.X >= 0 {
 				intersections = append(intersections, point)
 			}
 
 			pi = pf
+			tPi = tPf
 		}
 
 		pf := s.Vertices[0]
+		tPf := s.TextureVertices[0]
 
-		point := IntersectionForTexture(y, [][]uint32{pi, pf})
+		point := IntersectionForTexture(y, pi, pf, tPi, tPf)
 
 		if point.X >= 0 {
 			intersections = append(intersections, point)

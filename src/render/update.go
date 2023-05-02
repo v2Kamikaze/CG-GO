@@ -4,26 +4,49 @@ import (
 	"cg-go/src/core/colors"
 	"cg-go/src/core/image"
 	"cg-go/src/core/scan"
+	"cg-go/src/core/vec"
 	"cg-go/src/shapes"
+	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-var pol = &shapes.GeometricShape{
-	Vertices: [][]uint32{
-		{50, 50, 0, 0},
-		{200, 60, 1, 0},
-		{200, 200, 1, 1},
-		{50, 200, 0, 1},
+var polImg = &shapes.GeometricShape{
+	Vertices: []vec.Vec2D{
+		vec.NewVec2D(0, 0),
+		vec.NewVec2D(400, 0),
+		vec.NewVec2D(380, 200),
+		vec.NewVec2D(50, 200),
+	},
+
+	TextureVertices: []vec.VecTexture{
+		vec.NewVecTexture(0, 0),
+		vec.NewVecTexture(1, 0),
+		vec.NewVecTexture(1, 1),
+		vec.NewVecTexture(0, 1),
 	},
 }
 
-var pol2 = &shapes.GeometricShape{
-	Vertices: [][]uint32{
-		{0, 0, colors.Blue},
-		{50, 0, colors.Blue},
-		{50, 50, colors.Red},
-		{0, 50, colors.Red},
+var triangle = &shapes.GeometricShape{
+	Vertices: []vec.Vec2D{
+		vec.NewVec2D(200, 200),
+		vec.NewVec2D(300, 300),
+		vec.NewVec2D(100, 300),
+	},
+}
+
+var square = &shapes.GeometricShape{
+	Vertices: []vec.Vec2D{
+		vec.NewVec2D(400, 400),
+		vec.NewVec2D(1000, 400),
+		vec.NewVec2D(1000, 600),
+		vec.NewVec2D(400, 600),
+	},
+	ColorVertices: []color.RGBA{
+		colors.HexToRGBA(colors.Purple),
+		colors.HexToRGBA(colors.Yellow),
+		colors.HexToRGBA(colors.Yellow),
+		colors.HexToRGBA(colors.Purple),
 	},
 }
 
@@ -31,9 +54,14 @@ var img, _ = image.ReadImage("./resources/cat.jpg")
 
 func Update(screen *ebiten.Image) {
 	screen.Clear()
-	scan.ScanlineTexture(screen, pol, img)
-	pol.DrawMesh(screen)
 
-	scan.ScanlineGradient(screen, pol2)
-	pol2.DrawMesh(screen)
+	scan.ScanlineTexture(screen, polImg, img)
+	polImg.DrawMesh(screen)
+
+	scan.ScanlineBasic(screen, triangle, colors.HexToRGBA(colors.Teal))
+	triangle.DrawMesh(screen)
+
+	scan.ScanlineGradient(screen, square)
+	square.DrawMesh(screen)
+
 }

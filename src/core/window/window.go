@@ -2,6 +2,7 @@ package window
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -50,5 +51,7 @@ func NewWindow() *window {
 }
 
 func (w *window) Run() {
-	ebiten.RunGame(w)
+	if err := ebiten.RunGameWithOptions(w, &ebiten.RunGameOptions{}); err != nil {
+		log.Fatal(err)
+	}
 }

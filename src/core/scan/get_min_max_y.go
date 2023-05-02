@@ -1,17 +1,21 @@
 package scan
 
-import "math"
+import (
+	"cg-go/src/core/vec"
+	"math"
+)
 
-func GetMinMaxY(vertices [][]uint32) (ymin int, ymax int) {
+func GetMinMaxY(vertices []vec.Vec2D) (ymin int, ymax int) {
 	ymin = math.MaxUint32
 	ymax = 0
 
 	for _, p := range vertices {
-		if int(p[1]) < ymin {
-			ymin = int(p[1])
+		if p.Y < ymin {
+			ymin = p.Y
 		}
-		if int(p[1]) > ymax {
-			ymax = int(p[1])
+
+		if p.Y > ymax {
+			ymax = p.Y
 		}
 	}
 

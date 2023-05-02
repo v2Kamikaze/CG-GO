@@ -1,5 +1,6 @@
 package transform
 
+/*
 import (
 	"cg-go/src/core/matrix"
 	"cg-go/src/shapes"
@@ -58,3 +59,4 @@ func ScalePolygon(sx, sy float64, shape *shapes.GeometricShape) {
 
 	shape.Vertices = scaled
 }
+*/
