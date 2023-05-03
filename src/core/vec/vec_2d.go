@@ -8,7 +8,7 @@ type VecTexture struct {
 	Tx, Ty float64
 }
 
-func NewVec2D(x, y int) Vec2D {
+func NewVec2(x, y int) Vec2D {
 	return Vec2D{x, y}
 }
 

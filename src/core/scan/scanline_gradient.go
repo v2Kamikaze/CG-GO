@@ -45,6 +45,11 @@ func ScanlineGradient(screen *ebiten.Image, s *shapes.GeometricShape) {
 		}
 
 		for pi := 0; pi < len(i); pi += 2 {
+
+			if len(i) == 1 {
+				continue
+			}
+
 			x1, startColor := i[pi].X, i[pi].Color
 			x2, endColor := i[pi+1].X, i[pi+1].Color
 

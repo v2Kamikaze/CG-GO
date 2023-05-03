@@ -46,6 +46,11 @@ func ScanlineTexture(screen *ebiten.Image, s *shapes.GeometricShape, texture [][
 		}
 
 		for pi := 0; pi < len(intersections); pi += 2 {
+
+			if len(intersections) == 1 {
+				continue
+			}
+
 			p1, p2 := intersections[pi], intersections[pi+1]
 
 			if p2.X < p1.X {
@@ -53,7 +58,12 @@ func ScanlineTexture(screen *ebiten.Image, s *shapes.GeometricShape, texture [][
 			}
 
 			for xk := p1.X; xk <= p2.X; xk++ {
-				pc := float64(xk-p1.X) / float64(p2.X-p1.X)
+				var pc float64
+
+				if p2.X != p1.X {
+					pc = float64(xk-p1.X) / float64(p2.X-p1.X)
+				}
+
 				tx := p1.Tx + pc*(p2.Tx-p1.Tx)
 				ty := p1.Ty + pc*(p2.Ty-p1.Ty)
 				color := pixel.GetPixel(texture, tx, ty)

@@ -8,7 +8,7 @@ import (
 
 func TranslatePoint(mtx [][]int, point vec.Vec2D) vec.Vec2D {
 	pointTranslated := matrix.MatrixMult(mtx, point.ToTransposedXY1())
-	return vec.NewVec2D(pointTranslated[0][0], pointTranslated[1][0])
+	return vec.NewVec2(pointTranslated[0][0], pointTranslated[1][0])
 }
 
 func NewTranslateMatrix[T int | float64](dx, dy T) [][]T {
@@ -19,8 +19,8 @@ func NewTranslateMatrix[T int | float64](dx, dy T) [][]T {
 	}
 }
 
-func TranslateVertices(dx, dy int, shape *shapes.GeometricShape) {
-	translateMat := NewTranslateMatrix(dx, dy)
+func TranslateVertices(delta vec.Vec2D, shape *shapes.GeometricShape) {
+	translateMat := NewTranslateMatrix(delta.X, delta.Y)
 
 	var translated []vec.Vec2D
 

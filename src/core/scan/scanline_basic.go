@@ -41,6 +41,10 @@ func ScanlineBasic(screen *ebiten.Image, s *shapes.GeometricShape, color color.R
 		}
 
 		for pi := 0; pi < len(i); pi += 2 {
+			if len(i) == 1 {
+				continue
+			}
+
 			x1, x2 := i[pi], i[pi+1]
 
 			if x2 < x1 {
