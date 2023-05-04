@@ -19,8 +19,8 @@ func NewScaledTranslatedMatrix(dx, dy, sx, sy float64) [][]float64 {
 }
 
 func ScalePoint(mtx [][]float64, point vec.Vec2D) vec.Vec2D {
-	pointScaled := matrix.MatrixMult(mtx, point.ToTransposedFXY1())
-	return vec.NewVec2(int(math.Round(pointScaled[0][0])), int(math.Round(pointScaled[1][0])))
+	pointScaled := matrix.MatrixMult(mtx, point.ToTransposedXY1())
+	return vec.NewVec2((math.Round(pointScaled[0][0])), (math.Round(pointScaled[1][0])))
 }
 
 func ScaleVertices(sx, sy float64, s *shapes.GeometricShape) {

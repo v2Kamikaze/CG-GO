@@ -6,7 +6,7 @@ import (
 	"cg-go/src/shapes"
 )
 
-func TranslatePoint(mtx [][]int, point vec.Vec2D) vec.Vec2D {
+func TranslatePoint(mtx [][]float64, point vec.Vec2D) vec.Vec2D {
 	pointTranslated := matrix.MatrixMult(mtx, point.ToTransposedXY1())
 	return vec.NewVec2(pointTranslated[0][0], pointTranslated[1][0])
 }

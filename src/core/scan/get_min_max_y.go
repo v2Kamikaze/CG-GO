@@ -10,12 +10,12 @@ func GetMinMaxY(vertices []vec.Vec2D) (ymin int, ymax int) {
 	ymax = 0
 
 	for _, p := range vertices {
-		if p.Y < ymin {
-			ymin = p.Y
+		if p.Y < float64(ymin) {
+			ymin = int(math.Round(p.Y))
 		}
 
-		if p.Y > ymax {
-			ymax = p.Y
+		if p.Y > float64(ymax) {
+			ymax = int(math.Round(p.Y))
 		}
 	}
 

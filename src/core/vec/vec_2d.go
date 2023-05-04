@@ -1,14 +1,14 @@
 package vec
 
 type Vec2D struct {
-	X, Y int
+	X, Y float64
 }
 
 type VecTexture struct {
 	Tx, Ty float64
 }
 
-func NewVec2(x, y int) Vec2D {
+func NewVec2(x, y float64) Vec2D {
 	return Vec2D{x, y}
 }
 
@@ -24,14 +24,14 @@ func Ones() Vec2D {
 	return Vec2D{1, 1}
 }
 
-func (v Vec2D) ToXYZ() []int {
-	return []int{v.X, v.Y, 1}
+func (v Vec2D) ToXYZ() []float64 {
+	return []float64{v.X, v.Y, 1}
 }
 
-func (v Vec2D) ToTransposedXY1() [][]int {
-	return [][]int{{v.X}, {v.Y}, {1}}
+func (v Vec2D) ToTransposedXY1() [][]float64 {
+	return [][]float64{{v.X}, {v.Y}, {1}}
 }
 
-func (v Vec2D) ToTransposedFXY1() [][]float64 {
-	return [][]float64{{float64(v.X)}, {float64(v.Y)}, {1}}
+func (v Vec2D) IsZero() bool {
+	return v.X == 0 && v.Y == 0
 }

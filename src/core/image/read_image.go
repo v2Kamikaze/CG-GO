@@ -1,12 +1,17 @@
 package image
 
 import (
+	"image"
 	"image/color"
 	"image/jpeg"
+	"image/png"
 	"os"
+	"strings"
 )
 
 func ReadImage(filepath string) ([][]color.RGBA, error) {
+	var img image.Image
+
 	// Abrir o arquivo de imagem
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -14,8 +19,12 @@ func ReadImage(filepath string) ([][]color.RGBA, error) {
 	}
 	defer file.Close()
 
-	// Decodificar a imagem em um objeto image.Image
-	img, err := jpeg.Decode(file)
+	if strings.HasSuffix(filepath, "png") {
+		img, err = png.Decode(file)
+	} else {
+		img, err = jpeg.Decode(file)
+	}
+
 	if err != nil {
 		return nil, err
 	}
