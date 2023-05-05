@@ -35,3 +35,7 @@ func (v Vec2D) ToTransposedXY1() [][]float64 {
 func (v Vec2D) IsZero() bool {
 	return v.X == 0 && v.Y == 0
 }
+
+func (v Vec2D) Plus(vec Vec2D) Vec2D {
+	return NewVec2(v.X+vec.X, v.Y+vec.Y)
+}

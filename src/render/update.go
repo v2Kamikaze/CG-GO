@@ -20,11 +20,11 @@ var polImg = &shapes.GeometricShape{
 		vec.NewVec2(50, 200),
 	},
 
-	TextureVertices: []vec.VecTexture{
-		vec.NewVecTexture(0, 0),
-		vec.NewVecTexture(1, 0),
-		vec.NewVecTexture(1, 1),
-		vec.NewVecTexture(0, 1),
+	TextureVertices: []vec.Vec2D{
+		vec.NewVec2(0, 0),
+		vec.NewVec2(1, 0),
+		vec.NewVec2(1, 1),
+		vec.NewVec2(0, 1),
 	},
 }
 
@@ -51,7 +51,7 @@ var square = &shapes.GeometricShape{
 	},
 }
 
-var square2 = shapes.NewSquare(100, 100, vec.NewVec2(50, 100))
+var square2 = shapes.NewRect(100, 100, vec.NewVec2(50, 100))
 
 var img, _ = image.ReadImage("./resources/cat.jpg")
 

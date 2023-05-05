@@ -29,7 +29,7 @@ func Intersection(y int, pi, pf vec.Vec2D) ScanlinePoint {
 	return NewScanlinePoint(-1, -1)
 }
 
-func IntersectionForTexture(y int, pi, pf vec.Vec2D, texturePi, texturePf vec.VecTexture) ScanlinePointTexture {
+func IntersectionForTexture(y int, pi, pf, texturePi, texturePf vec.Vec2D) ScanlinePointTexture {
 
 	if pi.Y == pf.Y {
 		return NewScanlinePointTexture(-1, 0, 0, 0)
@@ -44,8 +44,8 @@ func IntersectionForTexture(y int, pi, pf vec.Vec2D, texturePi, texturePf vec.Ve
 
 	if t > 0 && t <= 1 {
 		x := math.Round((pi.X) + t*((pf.X)-(pi.X)))
-		tx := texturePi.Tx + t*(texturePf.Tx-texturePi.Tx)
-		ty := texturePi.Ty + t*(texturePf.Ty-texturePi.Ty)
+		tx := texturePi.X + t*(texturePf.X-texturePi.X)
+		ty := texturePi.Y + t*(texturePf.Y-texturePi.Y)
 
 		return NewScanlinePointTexture(int(x), y, tx, ty)
 	}

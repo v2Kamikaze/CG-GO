@@ -1,9 +1,16 @@
 package main
 
 import (
+	"cg-go/src/core/screen"
 	"cg-go/src/world"
 )
 
 func main() {
-	world.New().Create()
+	screen.New().
+		SetWidth(1000).
+		SetHeight(800).
+		SetTitle("Term").
+		SetOnUpdate(world.Update).
+		Build().
+		Run()
 }

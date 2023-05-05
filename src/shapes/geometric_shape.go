@@ -11,7 +11,7 @@ import (
 type GeometricShape struct {
 	Vertices        []vec.Vec2D
 	ColorVertices   []color.RGBA
-	TextureVertices []vec.VecTexture
+	TextureVertices []vec.Vec2D
 	Texture         [][]color.RGBA
 }
 
@@ -44,12 +44,12 @@ func (s *GeometricShape) WithTexture(texture [][]color.RGBA) *GeometricShape {
 	return s
 }
 
-func (s *GeometricShape) WithTextureVertices(textureVertices []vec.VecTexture) *GeometricShape {
+func (s *GeometricShape) WithTextureVertices(textureVertices []vec.Vec2D) *GeometricShape {
 	s.TextureVertices = textureVertices
 	return s
 }
 
-func NewSquare(width, height float64, center vec.Vec2D) *GeometricShape {
+func NewRect(width, height float64, center vec.Vec2D) *GeometricShape {
 	return &GeometricShape{
 		Vertices: []vec.Vec2D{
 			vec.NewVec2(center.X-width, center.Y-height),
