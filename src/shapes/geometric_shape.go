@@ -78,3 +78,18 @@ func Copy(s *GeometricShape) *GeometricShape {
 		Texture:         s.Texture,
 	}
 }
+
+func (s *GeometricShape) Center() vec.Vec2D {
+	var sumX, sumY float64
+
+	for _, v := range s.Vertices {
+		sumX += v.X
+		sumY += v.Y
+	}
+
+	len := len(s.Vertices)
+	centerX := sumX / float64(len)
+	centerY := sumY / float64(len)
+
+	return vec.NewVec2(centerX, centerY)
+}

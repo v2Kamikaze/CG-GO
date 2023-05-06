@@ -31,3 +31,19 @@ func (v Vec2D) IsZero() bool {
 func (v Vec2D) Plus(vec Vec2D) Vec2D {
 	return NewVec2(v.X+vec.X, v.Y+vec.Y)
 }
+
+func (v Vec2D) ScalarSum(value float64) Vec2D {
+	return NewVec2(v.X+value, v.Y+value)
+}
+
+func (v Vec2D) ScalarSub(value float64) Vec2D {
+	return v.ScalarSum(-value)
+}
+
+func (v Vec2D) ScalarMult(value float64) Vec2D {
+	return NewVec2(v.X*value, v.Y*value)
+}
+
+func (v Vec2D) ScalarDiv(value float64) Vec2D {
+	return v.ScalarMult(1 / value)
+}

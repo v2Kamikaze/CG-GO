@@ -1,14 +1,9 @@
 package window
 
 import (
-	"cg-go/src/core/colors"
 	"cg-go/src/core/matrix"
-	"cg-go/src/core/pixel"
-	"cg-go/src/core/transform"
 	"cg-go/src/core/vec"
 	"cg-go/src/shapes"
-
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Window struct {
@@ -17,23 +12,6 @@ type Window struct {
 
 func New(pi, pf vec.Vec2D) *Window {
 	return &Window{pi, pf}
-}
-
-func (w *Window) DrawCameraBounds(ctx *ebiten.Image) {
-	width := w.pf.X - w.pi.X
-	height := w.pf.Y - w.pi.Y
-
-	pixel.DrawLine(ctx, int(w.pi.X), int(w.pi.Y), int(w.pi.X+width), int(w.pi.Y), colors.HexToRGBA(colors.White))
-	pixel.DrawLine(ctx, int(w.pi.X), int(w.pi.Y+height), int(w.pi.X+width), int(w.pi.Y+height), colors.HexToRGBA(colors.White))
-
-	pixel.DrawLine(ctx, int(w.pi.X), int(w.pi.Y), int(w.pi.X), int(w.pi.Y+height), colors.HexToRGBA(colors.White))
-	pixel.DrawLine(ctx, int(w.pi.X+width), int(w.pi.Y), int(w.pi.X+width), int(w.pi.Y+height), colors.HexToRGBA(colors.White))
-}
-
-func (w *Window) Translate(delta vec.Vec2D) {
-	mtx := transform.NewTranslateMatrix(delta.X, delta.Y)
-	w.pi = transform.TranslatePoint(mtx, w.pi)
-	w.pf = transform.TranslatePoint(mtx, w.pf)
 }
 
 func (w *Window) MapPoints(s *shapes.GeometricShape, vp *Viewport) {

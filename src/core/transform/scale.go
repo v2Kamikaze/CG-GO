@@ -4,7 +4,6 @@ import (
 	"cg-go/src/core/matrix"
 	"cg-go/src/core/vec"
 	"cg-go/src/shapes"
-	"math"
 )
 
 func NewScaleMatrix(sx, sy float64) [][]float64 {
@@ -18,18 +17,13 @@ func NewScaledTranslatedMatrix(dx, dy, sx, sy float64) [][]float64 {
 	return matrix.MatrixMult(matrix.MatrixMult(translateMatForward, rawScaleMat), translateMatBack)
 }
 
-func ScalePoint(mtx [][]float64, point vec.Vec2D) vec.Vec2D {
-	pointScaled := matrix.MatrixMult(mtx, point.ToTransposedXY1())
-	return vec.NewVec2((math.Round(pointScaled[0][0])), (math.Round(pointScaled[1][0])))
-}
-
 func ScaleVertices(sx, sy float64, s *shapes.GeometricShape) {
 	mtx := NewScaledTranslatedMatrix(float64(s.Vertices[0].X), float64(s.Vertices[0].Y), sx, sy)
 
 	var scaled []vec.Vec2D
 
 	for _, point := range s.Vertices {
-		scaled = append(scaled, ScalePoint(mtx, point))
+		scaled = append(scaled, TransformPoint(mtx, point))
 	}
 
 	s.Vertices = scaled
