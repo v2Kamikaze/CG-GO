@@ -9,8 +9,8 @@ import (
 
 func DrawLine(screen *ebiten.Image, x0, y0, x1, y1 int, c color.RGBA) {
 	// Calcula as diferenças em x e y
-	deltaX := math.Abs(float64(x1 - x0))
-	deltaY := math.Abs(float64(y1 - y0))
+	deltaX := math.Abs(float64(x1) - float64(x0))
+	deltaY := math.Abs(float64(y1) - float64(y0))
 	// Determina as direções da linha em x e y
 	dirX := 1
 	if x0 > x1 {

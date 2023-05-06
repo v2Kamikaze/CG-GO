@@ -13,5 +13,5 @@ func GetPixel(image [][]color.RGBA, x, y float64) color.RGBA {
 	imgX := math.Round(float64(rows-1) * x)
 	imgY := math.Round(float64(columns-1) * y)
 
-	return image[int(imgY)][int(imgX)]
+	return image[int(math.Round(imgY))][int(math.Round(imgX))]
 }

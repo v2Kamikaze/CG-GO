@@ -1,7 +1,7 @@
 package window
 
 type Viewport struct {
-	width, height float64
+	Width, Height float64
 }
 
 func NewViewport(width, height float64) *Viewport {
