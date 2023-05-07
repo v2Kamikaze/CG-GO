@@ -3,24 +3,21 @@ package main
 import (
 	"cg-go/src/core/colors"
 	"cg-go/src/core/image"
-	"cg-go/src/core/pixel"
-	"cg-go/src/core/scan"
 	"cg-go/src/core/screen"
 	"cg-go/src/core/transform"
 	"cg-go/src/core/vec"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
+	"cg-go/src/memory"
+	"cg-go/src/scan"
 	"cg-go/src/window"
-	"fmt"
 	"image/color"
 	"math"
-	"strings"
-	"sync"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 var img, _ = image.ReadImage("./resources/gato.png")
-var player = shapes.NewRect(1, 1, vec.NewVec2(3, 3)).
+var player = geo.NewRect(1, 1, vec.NewVec2(3, 3)).
 	WithTextureVertices([]vec.Vec2D{
 		vec.NewVec2(0, 0),
 		vec.NewVec2(1, 0),
@@ -28,39 +25,50 @@ var player = shapes.NewRect(1, 1, vec.NewVec2(3, 3)).
 		vec.NewVec2(0, 1),
 	}).WithTexture(img)
 
-var rect = shapes.NewRect(1.5, 1.5, vec.NewVec2(3, 3))
-var tri = shapes.NewTriangle(2, 3, vec.NewVec2(3, 3))
+var rectColor = geo.NewRect(20, 20, vec.NewVec2(150, 100)).WithColors(
+	[]color.RGBA{
+		colors.HexToRGBA(colors.Yellow),
+		colors.HexToRGBA(colors.Purple),
+		colors.HexToRGBA(colors.Purple),
+		colors.HexToRGBA(colors.Yellow),
+	},
+)
 
-var vp = window.NewViewport(300, 300)
+var rect = geo.NewRect(1.5, 1.5, vec.NewVec2(3, 3))
+var tri = geo.NewTriangle(2, 3, vec.NewVec2(3, 3))
+
+var vp = window.NewViewport(500, 400)
 var win = window.New(vec.NewVec2(0, 0), vec.NewVec2(6, 6))
 
-var mtx = NewScreenMat(int(vp.Width), int(vp.Height))
+var mem = memory.New(int(vp.Width), int(vp.Height))
+
+var sqr = geo.NewRect(20, 20, vec.NewVec2(50, 50))
 
 func Update(ctx *ebiten.Image) {
-	for i := 0; i < len(mtx); i++ {
-		for j := 0; j < len(mtx[i]); j++ {
-			SetPixel(mtx, j, i, colors.HexToRGBA(colors.Blue))
-		}
-	}
+	mem.Clear()
 
-	//Clear(mtx)
+	sqr.DrawBounds(mem)
 
-	for i := 0; i < len(mtx); i++ {
-		for j := 0; j < len(mtx[i]); j++ {
-			pixel.DrawPixel(ctx, i, j, mtx[i][j])
-		}
-	}
+	scan.ScanlineBasic(mem, rect, colors.HexToRGBA(colors.Yellow))
+	rect.DrawBounds(mem)
 
-	scan.ScanlineBasic(ctx, rect, colors.HexToRGBA(colors.Yellow))
-	rect.DrawMesh(ctx)
-	scan.ScanlineBasic(ctx, tri, colors.HexToRGBA(colors.Pink))
-	tri.DrawMesh(ctx)
-	scan.ScanlineTexture(ctx, player, player.Texture)
-	player.DrawMesh(ctx)
+	scan.ScanlineBasic(mem, tri, colors.HexToRGBA(colors.Pink))
+	tri.DrawBounds(mem)
 
+	scan.ScanlineTexture(mem, player, player.Texture)
+	player.DrawBounds(mem)
+
+	scan.ScanlineGradient(mem, rectColor)
+	rectColor.DrawBounds(mem)
+
+	mem.Draw(ctx)
+
+	transform.TranslateVertices(vec.NewVec2(0.5, 0), tri)
 	transform.RotateVerticesOnPivot(-4, tri.Center(), tri)
-	transform.RotateVerticesOnPivot(2, rect.Center(), rect)
-	transform.RotateVerticesOnPivot(-2, player.Center(), player)
+	transform.RotateVerticesOnPivot(-4, player.Center(), player)
+	transform.RotateVerticesOnPivot(4, player.Center(), rect)
+	transform.RotateVerticesOnPivot(6, player.Center(), sqr)
+
 }
 
 func main() {
@@ -75,48 +83,4 @@ func main() {
 		SetOnUpdate(Update).
 		Build().
 		Run()
-}
-
-func NewScreenMat(width, height int) [][]color.RGBA {
-	mtx := make([][]color.RGBA, width)
-
-	for i := 0; i < width; i++ {
-		mtx[i] = make([]color.RGBA, height)
-	}
-
-	return mtx
-}
-
-func ToString(mtx [][]color.RGBA) {
-	fmt.Println(strings.Repeat("=", len(mtx)*20))
-	for i := 0; i < len(mtx); i++ {
-		fmt.Print("[")
-		for j := 0; j < len(mtx[i]); j++ {
-			fmt.Print(" ", mtx[i][j])
-		}
-		fmt.Println("]")
-	}
-	fmt.Println(strings.Repeat("=", len(mtx)*20))
-
-}
-
-func SetPixel(mtx [][]color.RGBA, x, y int, color color.RGBA) {
-	mtx[y][x] = color
-}
-
-func Clear(mtx [][]color.RGBA) {
-	wg := &sync.WaitGroup{}
-
-	wg.Add(len(mtx))
-
-	for i := 0; i < len(mtx); i++ {
-		go func(x int, wg *sync.WaitGroup) {
-			for j := 0; j < len(mtx[x]); j++ {
-				SetPixel(mtx, x, j, color.RGBA{})
-			}
-			wg.Done()
-		}(i, wg)
-	}
-
-	wg.Wait()
 }

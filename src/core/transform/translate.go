@@ -2,7 +2,7 @@ package transform
 
 import (
 	"cg-go/src/core/vec"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
 )
 
 func NewTranslateMatrix[T int | float64](dx, dy T) [][]T {
@@ -13,7 +13,7 @@ func NewTranslateMatrix[T int | float64](dx, dy T) [][]T {
 	}
 }
 
-func TranslateVertices(delta vec.Vec2D, shape *shapes.GeometricShape) {
+func TranslateVertices(delta vec.Vec2D, shape *geo.GeometricShape) {
 	translateMat := NewTranslateMatrix(delta.X, delta.Y)
 
 	var translated []vec.Vec2D

@@ -3,7 +3,7 @@ package window
 import (
 	"cg-go/src/core/matrix"
 	"cg-go/src/core/vec"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
 )
 
 type Window struct {
@@ -14,7 +14,7 @@ func New(pi, pf vec.Vec2D) *Window {
 	return &Window{pi, pf}
 }
 
-func (w *Window) MapPoints(s *shapes.GeometricShape, vp *Viewport) {
+func (w *Window) MapPoints(s *geo.GeometricShape, vp *Viewport) {
 	MapPointsToWindow(s, w.pi, w.pf, vp)
 }
 
@@ -29,7 +29,7 @@ func MapPointToWindow(point vec.Vec2D, wi, wf vec.Vec2D, vp *Viewport) vec.Vec2D
 	return vec.NewVec2(newPoint[0][0], newPoint[1][0])
 }
 
-func MapPointsToWindow(s *shapes.GeometricShape, wi, wf vec.Vec2D, vp *Viewport) {
+func MapPointsToWindow(s *geo.GeometricShape, wi, wf vec.Vec2D, vp *Viewport) {
 	for i, p := range s.Vertices {
 		s.Vertices[i] = MapPointToWindow(p, wi, wf, vp)
 	}

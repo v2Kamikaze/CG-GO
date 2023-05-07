@@ -1,8 +1,11 @@
-package shapes
+package geo
 
 import (
 	"cg-go/src/core/pixel"
+
 	"cg-go/src/core/vec"
+	"cg-go/src/memory"
+	mempixel "cg-go/src/pixel"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -32,6 +35,23 @@ func (s *GeometricShape) DrawMesh(screen *ebiten.Image) {
 	xf := s.Vertices[0].X
 	yf := s.Vertices[0].Y
 	pixel.DrawLine(screen, int(xi), int(yi), int(xf), int(yf), color.RGBA{255, 255, 255, 255})
+}
+
+func (s *GeometricShape) DrawBounds(mem memory.Memory) {
+	if len(s.Vertices) < 3 {
+		return
+	}
+
+	pi := s.Vertices[0]
+	for i := 1; i < len(s.Vertices); i++ {
+		pf := s.Vertices[i]
+		mempixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+		pi = pf
+	}
+
+	pf := s.Vertices[0]
+	mempixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+
 }
 
 func (s *GeometricShape) WithColors(colors []color.RGBA) *GeometricShape {

@@ -3,7 +3,7 @@ package transform
 import (
 	"cg-go/src/core/matrix"
 	"cg-go/src/core/vec"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
 )
 
 func NewScaleMatrix(sx, sy float64) [][]float64 {
@@ -17,7 +17,7 @@ func NewScaledTranslatedMatrix(dx, dy, sx, sy float64) [][]float64 {
 	return matrix.MatrixMult(matrix.MatrixMult(translateMatForward, rawScaleMat), translateMatBack)
 }
 
-func ScaleVertices(sx, sy float64, s *shapes.GeometricShape) {
+func ScaleVertices(sx, sy float64, s *geo.GeometricShape) {
 	mtx := NewScaledTranslatedMatrix(float64(s.Vertices[0].X), float64(s.Vertices[0].Y), sx, sy)
 
 	var scaled []vec.Vec2D

@@ -3,7 +3,7 @@ package transform
 import (
 	"cg-go/src/core/matrix"
 	"cg-go/src/core/vec"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
 	"math"
 )
 
@@ -17,7 +17,7 @@ func NewRotateMatrix(angle float64) [][]float64 {
 	}
 }
 
-func RotateVertices(angle float64, s *shapes.GeometricShape) {
+func RotateVertices(angle float64, s *geo.GeometricShape) {
 	mtx := NewRotateMatrix(angle)
 
 	var rotated []vec.Vec2D
@@ -41,7 +41,7 @@ func NewRotateMatriWithPivot(angle float64, pivot vec.Vec2D) [][]float64 {
 	}
 }
 
-func RotateVerticesOnPivot(angle float64, pivot vec.Vec2D, s *shapes.GeometricShape) {
+func RotateVerticesOnPivot(angle float64, pivot vec.Vec2D, s *geo.GeometricShape) {
 	translate1 := NewTranslateMatrix(-pivot.X, -pivot.Y)
 
 	rotate := NewRotateMatrix(angle)

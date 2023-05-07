@@ -1,5 +1,7 @@
 package vec
 
+import "math"
+
 type Vec2D struct {
 	X, Y float64
 }
@@ -32,6 +34,10 @@ func (v Vec2D) Plus(vec Vec2D) Vec2D {
 	return NewVec2(v.X+vec.X, v.Y+vec.Y)
 }
 
+func (v Vec2D) Sub(vec Vec2D) Vec2D {
+	return NewVec2(v.X-vec.X, v.Y-vec.Y)
+}
+
 func (v Vec2D) ScalarSum(value float64) Vec2D {
 	return NewVec2(v.X+value, v.Y+value)
 }
@@ -46,4 +52,21 @@ func (v Vec2D) ScalarMult(value float64) Vec2D {
 
 func (v Vec2D) ScalarDiv(value float64) Vec2D {
 	return v.ScalarMult(1 / value)
+}
+
+func GetMinMaxY(vertices []Vec2D) (ymin int, ymax int) {
+	ymin = math.MaxUint32
+	ymax = 0
+
+	for _, p := range vertices {
+		if p.Y < float64(ymin) {
+			ymin = int(math.Round(p.Y))
+		}
+
+		if p.Y > float64(ymax) {
+			ymax = int(math.Round(p.Y))
+		}
+	}
+
+	return
 }
