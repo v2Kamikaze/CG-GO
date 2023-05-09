@@ -1,40 +1,16 @@
 package geo
 
 import (
-	"cg-go/src/core/pixel"
-
 	"cg-go/src/core/vec"
 	"cg-go/src/memory"
-	mempixel "cg-go/src/pixel"
+	"cg-go/src/pixel"
 	"image/color"
-
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type GeometricShape struct {
 	Vertices        []vec.Vec2D
 	ColorVertices   []color.RGBA
 	TextureVertices []vec.Vec2D
-	Texture         [][]color.RGBA
-}
-
-func (s *GeometricShape) DrawMesh(screen *ebiten.Image) {
-	if len(s.Vertices) < 3 {
-		return
-	}
-
-	xi := s.Vertices[0].X
-	yi := s.Vertices[0].Y
-	for i := 1; i < len(s.Vertices); i++ {
-		xf := s.Vertices[i].X
-		yf := s.Vertices[i].Y
-		pixel.DrawLine(screen, int(xi), int(yi), int(xf), int(yf), color.RGBA{255, 255, 255, 255})
-		xi = xf
-		yi = yf
-	}
-	xf := s.Vertices[0].X
-	yf := s.Vertices[0].Y
-	pixel.DrawLine(screen, int(xi), int(yi), int(xf), int(yf), color.RGBA{255, 255, 255, 255})
 }
 
 func (s *GeometricShape) DrawBounds(mem memory.Memory) {
@@ -45,22 +21,17 @@ func (s *GeometricShape) DrawBounds(mem memory.Memory) {
 	pi := s.Vertices[0]
 	for i := 1; i < len(s.Vertices); i++ {
 		pf := s.Vertices[i]
-		mempixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+		pixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
 		pi = pf
 	}
 
 	pf := s.Vertices[0]
-	mempixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+	pixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
 
 }
 
 func (s *GeometricShape) WithColors(colors []color.RGBA) *GeometricShape {
 	s.ColorVertices = colors
-	return s
-}
-
-func (s *GeometricShape) WithTexture(texture [][]color.RGBA) *GeometricShape {
-	s.Texture = texture
 	return s
 }
 
@@ -91,11 +62,18 @@ func NewTriangle(base, height float64, center vec.Vec2D) *GeometricShape {
 }
 
 func Copy(s *GeometricShape) *GeometricShape {
+	v := make([]vec.Vec2D, len(s.Vertices))
+	cv := make([]color.RGBA, len(s.ColorVertices))
+	tv := make([]vec.Vec2D, len(s.TextureVertices))
+
+	copy(v, s.Vertices)
+	copy(cv, s.ColorVertices)
+	copy(tv, s.TextureVertices)
+
 	return &GeometricShape{
-		Vertices:        s.Vertices,
-		ColorVertices:   s.ColorVertices,
-		TextureVertices: s.TextureVertices,
-		Texture:         s.Texture,
+		Vertices:        v,
+		ColorVertices:   cv,
+		TextureVertices: tv,
 	}
 }
 
@@ -112,4 +90,9 @@ func (s *GeometricShape) Center() vec.Vec2D {
 	centerY := sumY / float64(len)
 
 	return vec.NewVec2(centerX, centerY)
+}
+
+func (s *GeometricShape) Apply(f func(s *GeometricShape)) {
+	cp := Copy(s)
+	f(cp)
 }

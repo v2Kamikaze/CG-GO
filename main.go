@@ -10,56 +10,50 @@ import (
 	"cg-go/src/memory"
 	"cg-go/src/scan"
 	"cg-go/src/window"
-	"image/color"
-	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 var img, _ = image.ReadImage("./resources/gato.png")
-var player = geo.NewRect(1, 1, vec.NewVec2(3, 3)).
+var player = geo.NewRect(1, 1, vec.NewVec2(6, 6)).
 	WithTextureVertices([]vec.Vec2D{
 		vec.NewVec2(0, 0),
 		vec.NewVec2(1, 0),
 		vec.NewVec2(1, 1),
 		vec.NewVec2(0, 1),
-	}).WithTexture(img)
+	})
 
-var rectColor = geo.NewRect(20, 20, vec.NewVec2(150, 100)).WithColors(
-	[]color.RGBA{
-		colors.HexToRGBA(colors.Yellow),
-		colors.HexToRGBA(colors.Purple),
-		colors.HexToRGBA(colors.Purple),
-		colors.HexToRGBA(colors.Yellow),
-	},
-)
+const Width, Height = 400, 400
 
-var rect = geo.NewRect(1.5, 1.5, vec.NewVec2(3, 3))
-var tri = geo.NewTriangle(2, 3, vec.NewVec2(3, 3))
+var rect = geo.NewRect(1.5, 1.5, vec.NewVec2(6, 6))
+var tri = geo.NewTriangle(2, 3, vec.NewVec2(6, 6))
+var sqr = geo.NewRect(20, 20, vec.NewVec2(150, 150))
 
-var vp = window.NewViewport(500, 400)
-var win = window.New(vec.NewVec2(0, 0), vec.NewVec2(6, 6))
+var vp1 = window.NewViewport(vec.Zeros(), vec.NewVec2((Width-1)/2, (Height-1)/2))
 
-var mem = memory.New(int(vp.Width), int(vp.Height))
+var vp2 = window.NewViewport(vec.NewVec2((Width-1)/2, 0), vec.NewVec2(Width-1, (Height-1)/2))
 
-var sqr = geo.NewRect(20, 20, vec.NewVec2(50, 50))
+var vp3 = window.NewViewport(vec.NewVec2(0, (Height-1)/2), vec.NewVec2((Width-1)/2, Height-1))
+
+var vp4 = window.NewViewport(vec.NewVec2((Width-1)/2, (Height-1)/2), vec.NewVec2(Width-1, Height-1))
+
+var win = window.New(vec.NewVec2(0, 0), vec.NewVec2(12, 12))
+var mem = memory.New(Width, Height)
 
 func Update(ctx *ebiten.Image) {
 	mem.Clear()
 
+	vp1.DrawBounds(mem)
+	vp2.DrawBounds(mem)
+	vp3.DrawBounds(mem)
+	vp4.DrawBounds(mem)
+
 	sqr.DrawBounds(mem)
 
-	scan.ScanlineBasic(mem, rect, colors.HexToRGBA(colors.Yellow))
-	rect.DrawBounds(mem)
-
-	scan.ScanlineBasic(mem, tri, colors.HexToRGBA(colors.Pink))
-	tri.DrawBounds(mem)
-
-	scan.ScanlineTexture(mem, player, player.Texture)
-	player.DrawBounds(mem)
-
-	scan.ScanlineGradient(mem, rectColor)
-	rectColor.DrawBounds(mem)
+	mapToVP(vp1)
+	mapToVP(vp2)
+	mapToVP(vp3)
+	mapToVP(vp4)
 
 	mem.Draw(ctx)
 
@@ -67,20 +61,34 @@ func Update(ctx *ebiten.Image) {
 	transform.RotateVerticesOnPivot(-4, tri.Center(), tri)
 	transform.RotateVerticesOnPivot(-4, player.Center(), player)
 	transform.RotateVerticesOnPivot(4, player.Center(), rect)
-	transform.RotateVerticesOnPivot(6, player.Center(), sqr)
-
+	transform.RotateVerticesOnPivot(6, vec.NewVec2(Height/2, Width/2), sqr)
 }
 
 func main() {
-	win.MapPoints(player, vp)
-	win.MapPoints(rect, vp)
-	win.MapPoints(tri, vp)
 
 	screen.New().
-		SetWidth(int(math.Round(vp.Width))).
-		SetHeight(int(math.Round(vp.Height))).
+		SetWidth(mem.Width()).
+		SetHeight(mem.Height()).
 		SetTitle("Term").
 		SetOnUpdate(Update).
 		Build().
 		Run()
+}
+
+func mapToVP(vp *window.Viewport) {
+	rect.Apply(func(s *geo.GeometricShape) {
+		win.MapPoints(s, vp)
+		scan.ScanlineBasic(mem, s, colors.HexToRGBA(colors.Yellow))
+	})
+
+	tri.Apply(func(s *geo.GeometricShape) {
+		win.MapPoints(s, vp)
+		scan.ScanlineBasic(mem, s, colors.HexToRGBA(colors.Pink))
+
+	})
+
+	player.Apply(func(s *geo.GeometricShape) {
+		win.MapPoints(s, vp)
+		scan.ScanlineTexture(mem, s, img)
+	})
 }

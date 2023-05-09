@@ -2,13 +2,13 @@ package scan
 
 import (
 	"cg-go/src/core/pixel"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func ScanlineBasic(screen *ebiten.Image, s *shapes.GeometricShape, color color.RGBA) {
+func ScanlineBasic(screen *ebiten.Image, s *geo.GeometricShape, color color.RGBA) {
 	if len(s.Vertices) < 3 {
 		return
 	}

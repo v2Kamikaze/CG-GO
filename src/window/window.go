@@ -15,13 +15,17 @@ func New(pi, pf vec.Vec2D) *Window {
 }
 
 func (w *Window) MapPoints(s *geo.GeometricShape, vp *Viewport) {
-	MapPointsToWindow(s, w.pi, w.pf, vp)
+	MapPointsToWindow(s, w, vp)
 }
 
 func MapPointToWindow(point vec.Vec2D, wi, wf vec.Vec2D, vp *Viewport) vec.Vec2D {
+
+	a := (vp.pf.X - vp.pi.X) / (wf.X - wi.X)
+	b := (vp.pf.Y - vp.pi.Y) / (wf.Y - wi.Y)
+
 	mtx := [][]float64{
-		{vp.Width / (wf.X - wi.X), 0, (wi.X * vp.Width / (wf.X - wi.X))},
-		{0, vp.Height / (wf.Y - wi.Y), (wi.Y * vp.Height / (wf.Y - wi.Y))},
+		{a, 0, vp.pi.X - a*wi.X},
+		{0, b, vp.pi.Y - b*wi.Y},
 		{0, 0, 1},
 	}
 
@@ -29,8 +33,8 @@ func MapPointToWindow(point vec.Vec2D, wi, wf vec.Vec2D, vp *Viewport) vec.Vec2D
 	return vec.NewVec2(newPoint[0][0], newPoint[1][0])
 }
 
-func MapPointsToWindow(s *geo.GeometricShape, wi, wf vec.Vec2D, vp *Viewport) {
+func MapPointsToWindow(s *geo.GeometricShape, w *Window, vp *Viewport) {
 	for i, p := range s.Vertices {
-		s.Vertices[i] = MapPointToWindow(p, wi, wf, vp)
+		s.Vertices[i] = MapPointToWindow(p, w.pi, w.pf, vp)
 	}
 }

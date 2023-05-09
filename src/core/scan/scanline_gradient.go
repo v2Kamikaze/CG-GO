@@ -3,12 +3,12 @@ package scan
 import (
 	"cg-go/src/core/colors"
 	"cg-go/src/core/pixel"
-	"cg-go/src/shapes"
+	"cg-go/src/geo"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func ScanlineGradient(screen *ebiten.Image, s *shapes.GeometricShape) {
+func ScanlineGradient(screen *ebiten.Image, s *geo.GeometricShape) {
 	if len(s.Vertices) < 3 {
 		return
 	}
