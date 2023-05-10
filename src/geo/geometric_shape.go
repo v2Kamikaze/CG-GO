@@ -1,9 +1,9 @@
 package geo
 
 import (
-	"cg-go/src/core/vec"
+	"cg-go/src/bitmap"
 	"cg-go/src/memory"
-	"cg-go/src/pixel"
+	"cg-go/src/vec"
 	"image/color"
 )
 
@@ -21,12 +21,12 @@ func (s *GeometricShape) DrawBounds(mem memory.Memory) {
 	pi := s.Vertices[0]
 	for i := 1; i < len(s.Vertices); i++ {
 		pf := s.Vertices[i]
-		pixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+		bitmap.BresenhamLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
 		pi = pf
 	}
 
 	pf := s.Vertices[0]
-	pixel.DrawLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+	bitmap.BresenhamLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
 
 }
 
@@ -43,10 +43,10 @@ func (s *GeometricShape) WithTextureVertices(textureVertices []vec.Vec2D) *Geome
 func NewRect(width, height float64, center vec.Vec2D) *GeometricShape {
 	return &GeometricShape{
 		Vertices: []vec.Vec2D{
-			vec.NewVec2(center.X-width, center.Y-height),
-			vec.NewVec2(center.X+width, center.Y-height),
-			vec.NewVec2(center.X+width, center.Y+height),
-			vec.NewVec2(center.X-width, center.Y+height),
+			vec.NewVec2D(center.X-width, center.Y-height),
+			vec.NewVec2D(center.X+width, center.Y-height),
+			vec.NewVec2D(center.X+width, center.Y+height),
+			vec.NewVec2D(center.X-width, center.Y+height),
 		},
 	}
 }
@@ -54,9 +54,9 @@ func NewRect(width, height float64, center vec.Vec2D) *GeometricShape {
 func NewTriangle(base, height float64, center vec.Vec2D) *GeometricShape {
 	return &GeometricShape{
 		Vertices: []vec.Vec2D{
-			vec.NewVec2(center.X, center.Y-height/2),
-			vec.NewVec2(center.X+base/2, center.Y+height/2),
-			vec.NewVec2(center.X-base/2, center.Y+height/2),
+			vec.NewVec2D(center.X, center.Y-height/2),
+			vec.NewVec2D(center.X+base/2, center.Y+height/2),
+			vec.NewVec2D(center.X-base/2, center.Y+height/2),
 		},
 	}
 }
@@ -89,7 +89,7 @@ func (s *GeometricShape) Center() vec.Vec2D {
 	centerX := sumX / float64(len)
 	centerY := sumY / float64(len)
 
-	return vec.NewVec2(centerX, centerY)
+	return vec.NewVec2D(centerX, centerY)
 }
 
 func (s *GeometricShape) Apply(f func(s *GeometricShape)) {

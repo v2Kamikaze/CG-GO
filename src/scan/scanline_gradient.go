@@ -1,10 +1,10 @@
 package scan
 
 import (
-	"cg-go/src/core/colors"
-	"cg-go/src/core/vec"
+	"cg-go/src/colors"
 	"cg-go/src/geo"
 	"cg-go/src/memory"
+	"cg-go/src/vec"
 )
 
 func ScanlineGradient(mem memory.Memory, s *geo.GeometricShape) {

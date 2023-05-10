@@ -1,10 +1,10 @@
 package scan
 
 import (
-	"cg-go/src/core/vec"
 	"cg-go/src/geo"
 	"cg-go/src/memory"
-	"cg-go/src/pixel"
+	"cg-go/src/tex"
+	"cg-go/src/vec"
 
 	"image/color"
 )
@@ -66,7 +66,7 @@ func ScanlineTexture(mem memory.Memory, s *geo.GeometricShape, texture [][]color
 
 				tx := p1.Tx + pc*(p2.Tx-p1.Tx)
 				ty := p1.Ty + pc*(p2.Ty-p1.Ty)
-				color := pixel.GetPixelFromTexture(texture, tx, ty)
+				color := tex.GetPixelFromTexture(texture, tx, ty)
 				mem.SetPixel(xk, y, color)
 			}
 		}

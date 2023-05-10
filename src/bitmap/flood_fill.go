@@ -1,8 +1,8 @@
 package bitmap
 
 import (
-	"cg-go/src/core/vec"
 	"cg-go/src/memory"
+	"cg-go/src/vec"
 	"image/color"
 )
 
@@ -52,17 +52,17 @@ func FloodFill(mem memory.Memory, point vec.Vec2D, colorBg, colorBorder color.RG
 
 		// Preenche o pixel e adiciona seus vizinhos à pilha se não forem da cor de borda
 		fillPixel(p)
-		if !isBorderColor(p.Plus(vec.NewVec2(-1, 0))) {
-			stack = append(stack, p.Plus(vec.NewVec2(-1, 0)))
+		if !isBorderColor(p.Plus(vec.NewVec2D(-1, 0))) {
+			stack = append(stack, p.Plus(vec.NewVec2D(-1, 0)))
 		}
-		if !isBorderColor(p.Plus(vec.NewVec2(1, 0))) {
-			stack = append(stack, p.Plus(vec.NewVec2(1, 0)))
+		if !isBorderColor(p.Plus(vec.NewVec2D(1, 0))) {
+			stack = append(stack, p.Plus(vec.NewVec2D(1, 0)))
 		}
-		if !isBorderColor(p.Plus(vec.NewVec2(0, -1))) {
-			stack = append(stack, p.Plus(vec.NewVec2(0, -1)))
+		if !isBorderColor(p.Plus(vec.NewVec2D(0, -1))) {
+			stack = append(stack, p.Plus(vec.NewVec2D(0, -1)))
 		}
-		if !isBorderColor(p.Plus(vec.NewVec2(0, 1))) {
-			stack = append(stack, p.Plus(vec.NewVec2(0, 1)))
+		if !isBorderColor(p.Plus(vec.NewVec2D(0, 1))) {
+			stack = append(stack, p.Plus(vec.NewVec2D(0, 1)))
 		}
 	}
 }

@@ -59,7 +59,6 @@ func (m *memVideo) Draw(ctx *ebiten.Image) {
 			ctx.Set(i, j, m.GetPixel(i, j))
 		}
 	}
-
 }
 
 func (m *memVideo) calcPosition(x, y int) int {

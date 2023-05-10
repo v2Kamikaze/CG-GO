@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"cg-go/src/core/vec"
+	"cg-go/src/vec"
 	"math"
 )
 

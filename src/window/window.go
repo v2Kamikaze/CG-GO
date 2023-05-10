@@ -1,9 +1,9 @@
 package window
 
 import (
-	"cg-go/src/core/matrix"
-	"cg-go/src/core/vec"
 	"cg-go/src/geo"
+	"cg-go/src/matrix"
+	"cg-go/src/vec"
 )
 
 type Window struct {
@@ -30,7 +30,7 @@ func MapPointToWindow(point vec.Vec2D, wi, wf vec.Vec2D, vp *Viewport) vec.Vec2D
 	}
 
 	newPoint := matrix.MatrixMult(mtx, point.ToTransposedXY1())
-	return vec.NewVec2(newPoint[0][0], newPoint[1][0])
+	return vec.NewVec2D(newPoint[0][0], newPoint[1][0])
 }
 
 func MapPointsToWindow(s *geo.GeometricShape, w *Window, vp *Viewport) {

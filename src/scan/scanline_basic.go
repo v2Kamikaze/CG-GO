@@ -1,9 +1,9 @@
 package scan
 
 import (
-	"cg-go/src/core/vec"
 	"cg-go/src/geo"
 	"cg-go/src/memory"
+	"cg-go/src/vec"
 	"image/color"
 )
 
