@@ -24,7 +24,7 @@ var player = geo.NewRect(1, 1, vec.NewVec2D(6, 6)).
 		vec.NewVec2D(0, 1),
 	})
 
-const Width, Height = 400, 400
+const Width, Height = 300, 300
 
 var rect = geo.NewRect(1.5, 1.5, vec.NewVec2D(6, 6))
 var tri = geo.NewTriangle(2, 3, vec.NewVec2D(6, 6))
@@ -56,12 +56,11 @@ func Update(ctx *ebiten.Image) {
 	mapToVP(vp3)
 	mapToVP(vp4)
 
-	bitmap.BresenhamDrawFilledCircle(mem, vec.NewVec2D(Height/2, Width/2), 100.0, colors.HexToRGBA(colors.Red))
-	bitmap.BresenhamDrawCircle(mem, vec.NewVec2D(Height/2, Width/2), 100.0, colors.HexToRGBA(colors.Yellow))
+	bitmap.BresenhamDrawFilledCircle(mem, vec.NewVec2D(Height/2, Width/2), 50.0, colors.HexToRGBA(colors.Red), colors.HexToRGBA(colors.Silver))
 
 	mem.Draw(ctx)
 
-	transform.TranslateVertices(vec.NewVec2D(0.5, 0), tri)
+	transform.TranslateVertices(vec.NewVec2D(-0.5, 0), tri)
 	transform.RotateVerticesOnPivot(-4, tri.Center(), tri)
 	transform.RotateVerticesOnPivot(-4, player.Center(), player)
 	transform.RotateVerticesOnPivot(4, player.Center(), rect)
