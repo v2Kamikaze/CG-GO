@@ -3,6 +3,7 @@ package window
 import (
 	"cg-go/src/geo"
 	"cg-go/src/matrix"
+	"cg-go/src/transform"
 	"cg-go/src/vec"
 )
 
@@ -16,6 +17,23 @@ func New(pi, pf vec.Vec2D) *Window {
 
 func (w *Window) MapPoints(s *geo.GeometricShape, vp *Viewport) {
 	MapPointsToWindow(s, w, vp)
+}
+
+func (w *Window) Center() vec.Vec2D {
+	return w.pi.Plus(w.pf).ScalarDiv(2)
+}
+
+func (w *Window) Zoom(ratio float64) {
+	center := w.Center()
+	mtx := transform.NewScaledTranslatedMatrix(center.X, center.Y, ratio, ratio)
+	w.pi = transform.TransformPoint(mtx, w.pi)
+	w.pf = transform.TransformPoint(mtx, w.pf)
+}
+
+func (w *Window) Translate(delta vec.Vec2D) {
+	mtx := transform.NewTranslateMatrix(delta.X, delta.Y)
+	w.pi = transform.TransformPoint(mtx, w.pi)
+	w.pf = transform.TransformPoint(mtx, w.pf)
 }
 
 func MapPointToWindow(point vec.Vec2D, wi, wf vec.Vec2D, vp *Viewport) vec.Vec2D {

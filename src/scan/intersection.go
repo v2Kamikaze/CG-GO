@@ -18,7 +18,7 @@ func Intersection(y int, pi, pf vec.Vec2D) ScanlinePoint {
 	}
 
 	// calcula t
-	var t float64 = (float64(y) - (pi.Y)) / (pf.Y - pi.Y)
+	t := (float64(y) - (pi.Y)) / (pf.Y - pi.Y)
 
 	// calcula x
 	if t > 0 && t <= 1 {

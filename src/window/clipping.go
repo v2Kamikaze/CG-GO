@@ -4,4 +4,8 @@ import (
 	"cg-go/src/geo"
 )
 
-func Clip(s *geo.GeometricShape, win *Window) *geo.GeometricShape { return nil }
+func ClipPolygon(original *geo.GeometricShape, vp *Viewport, win *Window) *geo.GeometricShape {
+	poly := geo.Copy(original)
+
+	return poly
+}
