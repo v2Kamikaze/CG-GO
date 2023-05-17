@@ -15,3 +15,18 @@ const (
 	Purple = 0xffaf52de
 	Pink   = 0xffff2d55
 )
+
+var (
+	ColorBlack  = HexToRGBA(Black)
+	ColorWhite  = HexToRGBA(White)
+	ColorSilver = HexToRGBA(Silver)
+	ColorRed    = HexToRGBA(Red)
+	ColorOrange = HexToRGBA(Orange)
+	ColorYellow = HexToRGBA(Yellow)
+	ColorGreen  = HexToRGBA(Green)
+	ColorTeal   = HexToRGBA(Teal)
+	ColorBlue   = HexToRGBA(Blue)
+	ColorIndigo = HexToRGBA(Indigo)
+	ColorPurple = HexToRGBA(Purple)
+	ColorPink   = HexToRGBA(Pink)
+)

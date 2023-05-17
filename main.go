@@ -60,8 +60,8 @@ func Update(ctx *ebiten.Image) {
 	mapToVP(vp3)
 	mapToVP(vp4)
 
-	bitmap.BresenhamDrawFilledCircle(mem, vec.NewVec2D(Height/2, Width/2), 35.0, colors.HexToRGBA(colors.Red), colors.HexToRGBA(colors.Silver))
-	bitmap.DrawFilledEllipse(mem, vec.NewVec2D(Height/2, Width/2), 50, 20, colors.HexToRGBA(colors.Purple), colors.HexToRGBA(colors.Yellow))
+	bitmap.BresenhamDrawFilledCircle(mem, vec.NewVec2D(Height/2, Width/2), 35.0, colors.ColorRed, colors.ColorSilver)
+	bitmap.DrawFilledEllipse(mem, vec.NewVec2D(Height/2, Width/2), 50, 20, colors.ColorPurple, colors.ColorYellow)
 
 	mem.Draw(ctx)
 
@@ -115,8 +115,7 @@ func mapToVP(vp *window.Viewport) {
 	tri.Apply(func(s *geo.GeometricShape) {
 		s = window.ClipPolygon(s, vp, win)
 		win.MapPoints(s, vp)
-		scan.ScanlineBasic(mem, s, colors.HexToRGBA(colors.Pink))
-
+		scan.ScanlineBasic(mem, s, colors.ColorPink)
 	})
 
 	player.Apply(func(s *geo.GeometricShape) {
