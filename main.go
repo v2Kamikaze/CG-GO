@@ -61,6 +61,7 @@ func Update(ctx *ebiten.Image) {
 	mapToVP(vp4)
 
 	bitmap.BresenhamDrawFilledCircle(mem, vec.NewVec2D(Height/2, Width/2), 35.0, colors.HexToRGBA(colors.Red), colors.HexToRGBA(colors.Silver))
+	bitmap.DrawFilledEllipse(mem, vec.NewVec2D(Height/2, Width/2), 50, 20, colors.HexToRGBA(colors.Purple), colors.HexToRGBA(colors.Yellow))
 
 	mem.Draw(ctx)
 
