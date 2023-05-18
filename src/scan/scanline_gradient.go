@@ -21,12 +21,10 @@ func ScanlineGradient(mem memory.Memory, s *geo.GeometricShape) {
 
 		for p := 1; p < len(s.Vertices); p++ {
 			pf := s.Vertices[p]
-			currenColor := s.ColorVertices[p]
+			currentColor := s.ColorVertices[p]
 
-			point := Intersection(y, pi, pf)
-
-			if point.X >= 0 {
-				i = append(i, NewScanlinePointGradient(point.X, point.T, currenColor))
+			if point := Intersection(y, pi, pf); point.X >= 0 {
+				i = append(i, NewScanlinePointGradient(point.X, point.T, currentColor))
 			}
 
 			pi, pf = pf, pi
@@ -34,9 +32,7 @@ func ScanlineGradient(mem memory.Memory, s *geo.GeometricShape) {
 
 		pf, currentColor := s.Vertices[0], s.ColorVertices[0]
 
-		point := Intersection(y, pi, pf)
-
-		if point.X >= 0 {
+		if point := Intersection(y, pi, pf); point.X >= 0 {
 			i = append(i, NewScanlinePointGradient(point.X, point.T, currentColor))
 		}
 

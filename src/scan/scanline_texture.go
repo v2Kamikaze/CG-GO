@@ -26,9 +26,7 @@ func ScanlineTexture(mem memory.Memory, s *geo.GeometricShape, texture [][]color
 			pf := s.Vertices[p]
 			tPf := s.TextureVertices[p]
 
-			point := IntersectionForTexture(y, pi, pf, tPi, tPf)
-
-			if point.X >= 0 {
+			if point := IntersectionForTexture(y, pi, pf, tPi, tPf); point.X >= 0 {
 				intersections = append(intersections, point)
 			}
 
@@ -39,9 +37,7 @@ func ScanlineTexture(mem memory.Memory, s *geo.GeometricShape, texture [][]color
 		pf := s.Vertices[0]
 		tPf := s.TextureVertices[0]
 
-		point := IntersectionForTexture(y, pi, pf, tPi, tPf)
-
-		if point.X >= 0 {
+		if point := IntersectionForTexture(y, pi, pf, tPi, tPf); point.X >= 0 {
 			intersections = append(intersections, point)
 		}
 

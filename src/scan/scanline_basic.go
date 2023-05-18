@@ -22,9 +22,7 @@ func ScanlineBasic(mem memory.Memory, s *geo.GeometricShape, color color.RGBA) {
 		for p := 1; p < len(s.Vertices); p++ {
 			pf := s.Vertices[p]
 
-			point := Intersection(y, pi, pf)
-
-			if point.X >= 0 {
+			if point := Intersection(y, pi, pf); point.X >= 0 {
 				i = append(i, point.X)
 			}
 
@@ -33,9 +31,7 @@ func ScanlineBasic(mem memory.Memory, s *geo.GeometricShape, color color.RGBA) {
 
 		pf := s.Vertices[0]
 
-		point := Intersection(y, pi, pf)
-
-		if point.X >= 0 {
+		if point := Intersection(y, pi, pf); point.X >= 0 {
 			i = append(i, point.X)
 		}
 
