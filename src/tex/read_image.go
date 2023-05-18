@@ -5,16 +5,17 @@ import (
 	"image/color"
 	"image/jpeg"
 	"image/png"
+	"log"
 	"os"
 	"strings"
 )
 
-func ReadImage(filepath string) ([][]color.RGBA, error) {
+func ReadImage(filepath string) [][]color.RGBA {
 	var img image.Image
 
 	file, err := os.Open(filepath)
 	if err != nil {
-		return nil, err
+		log.Panicf("não foi possível carregar a textura %s. erro: %+v", filepath, err)
 	}
 	defer file.Close()
 
@@ -25,7 +26,7 @@ func ReadImage(filepath string) ([][]color.RGBA, error) {
 	}
 
 	if err != nil {
-		return nil, err
+		log.Panicf("não foi possível carregar a textura %s. erro: %+v", filepath, err)
 	}
 
 	width := img.Bounds().Size().X
@@ -40,5 +41,5 @@ func ReadImage(filepath string) ([][]color.RGBA, error) {
 		colors[y] = row
 	}
 
-	return colors, nil
+	return colors
 }

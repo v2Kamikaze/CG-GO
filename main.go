@@ -23,7 +23,7 @@ var mem = memory.New(Width, Height)
 
 var center = win.Center()
 
-var img, _ = tex.ReadImage("./resources/gopher.png")
+var text = tex.ReadImage("./resources/gopher.png")
 var player = geo.NewRect(1, 1, center).
 	WithTextureVertices([]vec.Vec2D{
 		vec.NewVec2D(0, 0),
@@ -92,7 +92,7 @@ func Update(ctx *ebiten.Image) {
 	transform.TranslateVertices(vec.NewVec2D(-0.1, 0), tri)
 	transform.RotateVerticesOnPivot(-4, tri.Center(), tri)
 	transform.RotateVerticesOnPivot(-4, player.Center(), player)
-	transform.RotateVerticesOnPivot(1, player.Center(), rect)
+	transform.RotateVerticesOnPivot(0, player.Center(), rect)
 }
 
 func main() {
@@ -120,7 +120,7 @@ func mapToVP(vp *window.Viewport) {
 
 	player.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
-		scan.ScanlineTexture(mem, s, img)
+		scan.ScanlineTexture(mem, s, text)
 	})
 
 }
