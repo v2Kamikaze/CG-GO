@@ -92,7 +92,7 @@ func Update(ctx *ebiten.Image) {
 	transform.TranslateVertices(vec.NewVec2D(-0.1, 0), tri)
 	transform.RotateVerticesOnPivot(-4, tri.Center(), tri)
 	transform.RotateVerticesOnPivot(-4, player.Center(), player)
-	transform.RotateVerticesOnPivot(0, player.Center(), rect)
+	transform.RotateVerticesOnPivot(1, player.Center(), rect)
 }
 
 func main() {
