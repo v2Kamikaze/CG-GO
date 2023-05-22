@@ -18,10 +18,12 @@ import (
 const Width, Height = 600, 400
 const NumMeteors = 50
 const MeteorsMinDist = 30
-const WindowScale = 2
+const WindowFactor = 2
 const MeteorSize = 20
 
-var win = window.New(vec.NewVec2D(0, 0), vec.NewVec2D(Width*WindowScale, Height*WindowScale))
+const WindowVelocity = 5
+
+var win = window.New(vec.NewVec2D(0, 0), vec.NewVec2D(Width*WindowFactor, Height*WindowFactor))
 var mem = memory.New(Width, Height)
 var center = win.Center()
 var mainViewport = window.NewViewport(vec.Zeros(), vec.NewVec2D(Width, Height))
@@ -31,7 +33,7 @@ var meteorTex = tex.ReadImage("./resources/meteor.png")
 var meteors = GenerateMeteors()
 
 var blackHoleTex = tex.ReadImage("./resources/Black_hole.png")
-var blackHole = geo.NewRect(80, 80, vec.NewVec2D(50, 300)).WithTextureVertices([]vec.Vec2D{
+var blackHole = geo.NewRect(100, 100, vec.NewVec2D(Width, Height)).WithTextureVertices([]vec.Vec2D{
 	vec.Zeros(),
 	vec.NewVec2D(1, 0),
 	vec.Ones(),
@@ -47,7 +49,7 @@ var terran = geo.NewRect(60, 60, vec.NewVec2D(150, 80)).WithTextureVertices([]ve
 })
 
 var lavaTex = tex.ReadImage("./resources/Lava.png")
-var lava = geo.NewRect(60, 60, vec.NewVec2D(360, 120)).WithTextureVertices([]vec.Vec2D{
+var lava = geo.NewRect(60, 60, vec.NewVec2D(250, 400)).WithTextureVertices([]vec.Vec2D{
 	vec.Zeros(),
 	vec.NewVec2D(1, 0),
 	vec.Ones(),
@@ -55,7 +57,7 @@ var lava = geo.NewRect(60, 60, vec.NewVec2D(360, 120)).WithTextureVertices([]vec
 })
 
 var barenTex = tex.ReadImage("./resources/Baren.png")
-var baren = geo.NewRect(20, 20, vec.NewVec2D(420, 200)).WithTextureVertices([]vec.Vec2D{
+var baren = geo.NewRect(20, 20, lava.Center().ScalarSum(90)).WithTextureVertices([]vec.Vec2D{
 	vec.Zeros(),
 	vec.NewVec2D(1, 0),
 	vec.Ones(),
@@ -63,12 +65,15 @@ var baren = geo.NewRect(20, 20, vec.NewVec2D(420, 200)).WithTextureVertices([]ve
 })
 
 var iceTex = tex.ReadImage("./resources/Ice.png")
-var ice = geo.NewRect(45, 45, vec.NewVec2D(450, 460)).WithTextureVertices([]vec.Vec2D{
+var ice = geo.NewRect(45, 45, vec.NewVec2D(900, 320)).WithTextureVertices([]vec.Vec2D{
 	vec.Zeros(),
 	vec.NewVec2D(1, 0),
 	vec.Ones(),
 	vec.NewVec2D(0, 1),
 })
+
+var starTex = tex.ReadImage("./resources/star.png")
+var stars = GenerateStars()
 
 var gopherTex = tex.ReadImage("./resources/gopher-astronaut.png")
 var gopher = geo.NewRect(20, 20, center).
@@ -80,15 +85,15 @@ var gopher = geo.NewRect(20, 20, center).
 	})
 
 func Update(ctx *ebiten.Image) {
+
 	mem.Clear(colors.ColorBlack)
+
 	DrawStars(mem)
-
-	miniMap.DrawBounds(mem)
-
 	DrawMeteors(mem)
-
 	MapObjectsToVP(mainViewport)
 	MapObjectsToVP(miniMap)
+
+	miniMap.DrawBounds(mem)
 
 	mem.Draw(ctx)
 
@@ -101,29 +106,29 @@ func Update(ctx *ebiten.Image) {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		win.Translate(vec.NewVec2D(-2, 0))
+		win.Translate(vec.NewVec2D(-WindowVelocity, 0))
 		transform.TranslateVertices(win.Center().Sub(gopher.Center()), gopher)
 		transform.RotateVerticesOnPivot(-4, gopher.Center(), gopher)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		win.Translate(vec.NewVec2D(2, 0))
+		win.Translate(vec.NewVec2D(WindowVelocity, 0))
 		transform.TranslateVertices(win.Center().Sub(gopher.Center()), gopher)
 		transform.RotateVerticesOnPivot(4, gopher.Center(), gopher)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		win.Translate(vec.NewVec2D(0, -2))
+		win.Translate(vec.NewVec2D(0, -WindowVelocity))
 		transform.TranslateVertices(win.Center().Sub(gopher.Center()), gopher)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		win.Translate(vec.NewVec2D(0, 2))
+		win.Translate(vec.NewVec2D(0, WindowVelocity))
 		transform.TranslateVertices(win.Center().Sub(gopher.Center()), gopher)
 	}
 
-	TransalteMeteors()
-	transform.RotateVerticesOnPivot(5, blackHole.Center(), blackHole)
+	RotateMeteors()
+	transform.RotateVerticesOnPivot(10, blackHole.Center(), blackHole)
 	transform.RotateVerticesOnPivot(0.1, terran.Center(), terran)
 	transform.RotateVerticesOnPivot(-0.5, lava.Center(), lava)
 	transform.RotateVerticesOnPivot(0.5, ice.Center(), ice)
@@ -177,11 +182,26 @@ func MapObjectsToVP(vp *window.Viewport) {
 
 }
 
+func GenerateStars() (stars []*geo.GeometricShape) {
+	for i := 0.0; i < Width*WindowFactor; i += 20 {
+		star := geo.NewRect(5, 5, vec.NewVec2D(i, float64(rand.Intn(Height*WindowFactor)))).
+			WithTextureVertices([]vec.Vec2D{
+				vec.Zeros(),
+				vec.NewVec2D(1, 0),
+				vec.Ones(),
+				vec.NewVec2D(0, 1),
+			})
+		stars = append(stars, star)
+	}
+	return
+}
+
 func DrawStars(mem memory.Memory) {
-	var y = 0
-	for i := 0; i < Width; i++ {
-		y = rand.Intn(Height)
-		mem.SetPixel(i, y, colors.ColorWhite)
+	for _, star := range stars {
+		star.Apply(func(s *geo.GeometricShape) {
+			win.MapPoints(s, mainViewport)
+			scan.ScanlineTexture(mem, s, starTex)
+		})
 	}
 }
 
@@ -195,8 +215,8 @@ func MeteorsPositions() []vec.Vec2D {
 
 		for !isValid {
 			isValid = true
-			x = rand.Float64() * Width * WindowScale
-			y = rand.Float64() * Height * WindowScale
+			x = rand.Float64() * Width * WindowFactor
+			y = rand.Float64() * Height * WindowFactor
 
 			for j := 0; j < i; j++ {
 				if vec.Distance(points[j], vec.NewVec2D(x, y)) < MeteorsMinDist {
@@ -238,7 +258,7 @@ func DrawMeteors(mem memory.Memory) {
 	}
 }
 
-func TransalteMeteors() {
+func RotateMeteors() {
 	for i := range meteors {
 		if i%2 == 0 {
 			transform.RotateVerticesOnPivot(-1, meteors[i].Center(), meteors[i])
