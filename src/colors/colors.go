@@ -12,8 +12,9 @@ const (
 	Teal   = 0xff5ac8fa
 	Blue   = 0xff007aff
 	Indigo = 0xff5856d6
-	Purple = 0xffaf52de
-	Pink   = 0xffff2d55
+	Purple = 0xff1d224c
+
+	Pink = 0xffff2d55
 )
 
 var (

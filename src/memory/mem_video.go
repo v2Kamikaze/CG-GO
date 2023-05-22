@@ -65,9 +65,9 @@ func (m *memVideo) calcPosition(x, y int) int {
 	return y*m.width + x
 }
 
-func (m *memVideo) Clear() {
+func (m *memVideo) Clear(color color.RGBA) {
 	for i := range m.mem {
-		m.mem[i] = color.RGBA{}
+		m.mem[i] = color
 	}
 
 }

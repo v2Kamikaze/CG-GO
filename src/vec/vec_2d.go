@@ -58,6 +58,12 @@ func (v Vec2D) Cross(vec Vec2D) float64 {
 	return v.X*vec.Y - v.Y*vec.X
 }
 
+func Distance(p1, p2 Vec2D) float64 {
+	dx := p2.X - p1.X
+	dy := p2.Y - p1.Y
+	return dx*dx + dy*dy
+}
+
 func GetMinMaxY(vertices []Vec2D) (ymin int, ymax int) {
 	ymin = math.MaxUint32
 	ymax = 0

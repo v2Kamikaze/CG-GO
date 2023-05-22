@@ -23,6 +23,14 @@ func (w *Window) Center() vec.Vec2D {
 	return w.pi.Plus(w.pf).ScalarDiv(2)
 }
 
+func (w *Window) Pf() vec.Vec2D {
+	return w.pf
+}
+
+func (w *Window) Pi() vec.Vec2D {
+	return w.pi
+}
+
 func (w *Window) Zoom(ratio float64) {
 	center := w.Center()
 	mtx := transform.NewScaledTranslatedMatrix(center.X, center.Y, ratio, ratio)
@@ -55,4 +63,8 @@ func MapPointsToWindow(s *geo.GeometricShape, w *Window, vp *Viewport) {
 	for i, p := range s.Vertices {
 		s.Vertices[i] = MapPointToWindow(p, w.pi, w.pf, vp)
 	}
+}
+
+func (w *Window) IsInsideWindow(point vec.Vec2D) bool {
+	return point.X >= w.pi.X && point.X <= w.pf.X && point.Y >= w.pi.Y && point.Y <= w.pf.Y
 }
