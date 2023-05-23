@@ -10,6 +10,7 @@ import (
 	"cg-go/src/transform"
 	"cg-go/src/vec"
 	"cg-go/src/window"
+	"image/color"
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -21,13 +22,13 @@ const MeteorsMinDist = 30
 const WindowFactor = 2
 const MeteorSize = 20
 
-const WindowVelocity = 5
+const WindowVelocity = 10
 
 var win = window.New(vec.NewVec2D(0, 0), vec.NewVec2D(Width*WindowFactor, Height*WindowFactor))
 var mem = memory.New(Width, Height)
 var center = win.Center()
 var mainViewport = window.NewViewport(vec.Zeros(), vec.NewVec2D(Width, Height))
-var miniMap = window.NewViewport(vec.NewVec2D((Width-50), 0), vec.NewVec2D(Width-1, 50))
+var miniMap = window.NewViewport(vec.NewVec2D((Width-120), 0), vec.NewVec2D(Width-1, 80))
 
 var meteorTex = tex.ReadImage("./resources/meteor.png")
 var meteors = GenerateMeteors()
@@ -74,6 +75,12 @@ var ice = geo.NewRect(45, 45, vec.NewVec2D(900, 320)).WithTextureVertices([]vec.
 
 var starTex = tex.ReadImage("./resources/star.png")
 var stars = GenerateStars()
+
+var shootingStar = geo.NewTriangle(10, 10, vec.NewVec2D(Width, Height)).WithColors([]color.RGBA{
+	colors.ColorRed,
+	colors.ColorYellow,
+	colors.ColorYellow,
+})
 
 var gopherTex = tex.ReadImage("./resources/gopher-astronaut.png")
 var gopher = geo.NewRect(20, 20, center).
@@ -128,11 +135,12 @@ func Update(ctx *ebiten.Image) {
 	}
 
 	RotateMeteors()
-	transform.RotateVerticesOnPivot(10, blackHole.Center(), blackHole)
+	//transform.RotateVerticesOnPivot(10, blackHole.Center(), blackHole)
 	transform.RotateVerticesOnPivot(0.1, terran.Center(), terran)
 	transform.RotateVerticesOnPivot(-0.5, lava.Center(), lava)
 	transform.RotateVerticesOnPivot(0.5, ice.Center(), ice)
 	transform.RotateVerticesOnPivot(2, lava.Center(), baren)
+	transform.TranslateVertices(vec.NewVec2D(10, 5), shootingStar)
 
 }
 
@@ -152,6 +160,7 @@ func MapObjectsToVP(vp *window.Viewport) {
 
 	blackHole.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
+		window.ClipPolygon(mem, s, vp)
 		scan.ScanlineTexture(mem, s, blackHoleTex)
 	})
 
@@ -173,6 +182,11 @@ func MapObjectsToVP(vp *window.Viewport) {
 	baren.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
 		scan.ScanlineTexture(mem, s, barenTex)
+	})
+
+	shootingStar.Apply(func(s *geo.GeometricShape) {
+		win.MapPoints(s, vp)
+		scan.ScanlineGradient(mem, s)
 	})
 
 	gopher.Apply(func(s *geo.GeometricShape) {
