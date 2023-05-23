@@ -91,6 +91,8 @@ var gopher = geo.NewRect(20, 20, center).
 		vec.NewVec2D(0, 1),
 	})
 
+var triangle = geo.NewTriangle(100, 100, center.ScalarSum(80))
+
 func Update(ctx *ebiten.Image) {
 
 	mem.Clear(colors.ColorBlack)
@@ -160,7 +162,7 @@ func MapObjectsToVP(vp *window.Viewport) {
 
 	blackHole.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
-		window.ClipPolygon(mem, s, vp)
+
 		scan.ScanlineTexture(mem, s, blackHoleTex)
 	})
 
@@ -187,6 +189,13 @@ func MapObjectsToVP(vp *window.Viewport) {
 	shootingStar.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
 		scan.ScanlineGradient(mem, s)
+	})
+
+	triangle.Apply(func(s *geo.GeometricShape) {
+		win.MapPoints(s, vp)
+		window.ClipPolygon(mem, s, vp)
+
+		scan.ScanlineBasic(mem, s, colors.ColorIndigo)
 	})
 
 	gopher.Apply(func(s *geo.GeometricShape) {
