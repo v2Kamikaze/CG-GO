@@ -12,11 +12,11 @@ func Intersection(pi, pf, linePi, linePf vec.Vec2D) (vec.Vec2D, float64, float64
 	// Cálculo do determinante
 	det := dir1.X*dir2.Y - dir1.Y*dir2.X
 
-	/* 	// Verifica se os segmentos são paralelos ou coincidentes
-	   	if math.Abs(det) < 1e-10 {
-	   		return vec.NewVec2D(-1, -1), 0, 0
-	   	}
-	*/
+	// Verifica se os segmentos são paralelos ou coincidentes
+	if pi.Y == pf.Y {
+		return vec.NewVec2D(-1, -1), 0, 0
+	}
+
 	// Cálculo dos vetores entre os pontos iniciais dos segmentos
 	startDiff := linePi.Sub(pi)
 
@@ -34,4 +34,8 @@ func Intersection(pi, pf, linePi, linePf vec.Vec2D) (vec.Vec2D, float64, float64
 
 	// Não há interseção dentro dos segmentos
 	return vec.NewVec2D(-1, -1), 0, 0
+}
+
+func CohenSutherland() {
+
 }

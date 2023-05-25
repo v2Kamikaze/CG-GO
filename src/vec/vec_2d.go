@@ -1,6 +1,9 @@
 package vec
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 type Vec2D struct {
 	X, Y float64
@@ -16,6 +19,10 @@ func Zeros() Vec2D {
 
 func Ones() Vec2D {
 	return Vec2D{1, 1}
+}
+
+func (v Vec2D) String() string {
+	return fmt.Sprintf("(%f, %f)", v.X, v.Y)
 }
 
 func (v Vec2D) ToXY1() []float64 {

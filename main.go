@@ -28,7 +28,7 @@ var win = window.New(vec.NewVec2D(0, 0), vec.NewVec2D(Width*WindowFactor, Height
 var mem = memory.New(Width, Height)
 var center = win.Center()
 var mainViewport = window.NewViewport(vec.Zeros(), vec.NewVec2D(Width, Height))
-var miniMap = window.NewViewport(vec.NewVec2D((Width-120), 0), vec.NewVec2D(Width-1, 80))
+var miniMap = window.NewViewport(vec.NewVec2D((Width-140), 20), vec.NewVec2D(Width-20, 100))
 
 var meteorTex = tex.ReadImage("./resources/meteor.png")
 var meteors = GenerateMeteors()
@@ -91,7 +91,11 @@ var gopher = geo.NewRect(20, 20, center).
 		vec.NewVec2D(0, 1),
 	})
 
-var triangle = geo.NewTriangle(100, 100, center.ScalarSum(80))
+var triangle = &geo.GeometricShape{
+	Vertices: []vec.Vec2D{{X: 400, Y: 300}, {X: 350, Y: 400}, {X: 400, Y: 500}, {X: 450, Y: 400}, {X: 400, Y: 350}},
+}
+
+//var triangle = geo.NewRect(100, 100, vec.NewVec2D(200, 200))
 
 func Update(ctx *ebiten.Image) {
 
@@ -162,7 +166,6 @@ func MapObjectsToVP(vp *window.Viewport) {
 
 	blackHole.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
-
 		scan.ScanlineTexture(mem, s, blackHoleTex)
 	})
 
@@ -193,8 +196,9 @@ func MapObjectsToVP(vp *window.Viewport) {
 
 	triangle.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
-		window.ClipPolygon(mem, s, vp)
-
+		if vp != miniMap {
+			s = window.SutherlandHodgeman(mem, s, vp)
+		}
 		scan.ScanlineBasic(mem, s, colors.ColorIndigo)
 	})
 
