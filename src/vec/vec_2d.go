@@ -10,7 +10,7 @@ type Vec2D struct {
 }
 
 func NewVec2D(x, y float64) Vec2D {
-	return Vec2D{x, y}
+	return Vec2D{truncate(x), truncate(y)}
 }
 
 func Zeros() Vec2D {
@@ -86,4 +86,10 @@ func GetMinMaxY(vertices []Vec2D) (ymin int, ymax int) {
 	}
 
 	return
+}
+
+func truncate(num float64) float64 {
+	scale := math.Pow10(5)
+	truncated := math.Round(num*scale) / scale
+	return truncated
 }

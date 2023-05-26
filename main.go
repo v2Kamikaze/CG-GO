@@ -22,7 +22,7 @@ const MeteorsMinDist = 30
 const WindowFactor = 2
 const MeteorSize = 20
 
-const WindowVelocity = 10
+const WindowVelocity = 20
 
 var win = window.New(vec.NewVec2D(0, 0), vec.NewVec2D(Width*WindowFactor, Height*WindowFactor))
 var mem = memory.New(Width, Height)
@@ -91,11 +91,13 @@ var gopher = geo.NewRect(20, 20, center).
 		vec.NewVec2D(0, 1),
 	})
 
-var triangle = &geo.GeometricShape{
+/* var triangle = &geo.GeometricShape{
 	Vertices: []vec.Vec2D{{X: 400, Y: 300}, {X: 350, Y: 400}, {X: 400, Y: 500}, {X: 450, Y: 400}, {X: 400, Y: 350}},
-}
+} */
 
 //var triangle = geo.NewRect(100, 100, vec.NewVec2D(200, 200))
+
+var triangle = geo.NewTriangle(100, 100, vec.NewVec2D(200, 200))
 
 func Update(ctx *ebiten.Image) {
 
