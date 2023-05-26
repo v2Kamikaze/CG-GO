@@ -14,6 +14,10 @@ func ScanlineTexture(mem memory.Memory, s *geo.GeometricShape, texture [][]color
 		return
 	}
 
+	if len(s.Vertices) != len(s.TextureVertices) {
+		return
+	}
+
 	ymin, ymax := vec.GetMinMaxY(s.Vertices)
 
 	for y := ymin; y <= ymax; y++ {

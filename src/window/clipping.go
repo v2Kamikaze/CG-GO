@@ -43,6 +43,7 @@ func SutherlandHodgeman(mem memory.Memory, shape *geo.GeometricShape, vp *Viewpo
 		topRight    = vec.NewVec2D(vp.pf.X, vp.pi.Y)
 		bottomLeft  = vec.NewVec2D(vp.pi.X, vp.pf.Y)
 		bottomRight = vp.pf
+		containsTex = len(shape.TextureVertices) != 0
 
 		s = geo.Copy(shape)
 	)
@@ -56,7 +57,7 @@ func SutherlandHodgeman(mem memory.Memory, shape *geo.GeometricShape, vp *Viewpo
 
 	for edge, edgePoint := range edges {
 		for _, vertice := range shape.Vertices {
-
+			var t float64
 			if !IsInside(vertice, Border(edge), edgePoint[0]) {
 
 				pi := shape.Vertices[0]
@@ -64,12 +65,14 @@ func SutherlandHodgeman(mem memory.Memory, shape *geo.GeometricShape, vp *Viewpo
 				for i := 1; i < len(shape.Vertices); i++ {
 					pf := shape.Vertices[i]
 
-					if point, _, _ := Intersection(pi, pf, edgePoint[0], edgePoint[1]); point.X > -1 {
+					if point, inter, _ := Intersection(pi, pf, edgePoint[0], edgePoint[1]); point.X > -1 {
 						s.Vertices = InsertAt(s.Vertices, i, point)
-						fmt.Println("Inseriu: ", point, i)
 						if !IsInside(pi, Border(edge), edgePoint[0]) {
 							s.Vertices = RemoveAt(s.Vertices, i-1)
 						}
+
+						t = inter
+
 					}
 
 					pi = pf
@@ -79,38 +82,57 @@ func SutherlandHodgeman(mem memory.Memory, shape *geo.GeometricShape, vp *Viewpo
 
 				if point, _, _ := Intersection(pi, pf, edgePoint[0], edgePoint[1]); point.X > -1 {
 					s.Vertices = InsertAt(s.Vertices, 1, point)
-					fmt.Println("Inseriu: ", point, 1)
 					if !IsInside(pi, Border(edge), edgePoint[0]) {
 						s.Vertices = RemoveAt(s.Vertices, len(s.Vertices)-1)
 					}
-				}
 
-				fmt.Println("Vertices originais: ", shape.Vertices)
-				fmt.Println("Vertices da cópia: ", s.Vertices)
+				}
 
 				// Removendo as arestas que não estão dentro da borda atual
 				clipVertices := make([]vec.Vec2D, len(s.Vertices))
 
 				copy(clipVertices, s.Vertices)
-				fmt.Println("Antes do clipping: ", clipVertices)
 
-				fmt.Println("Edge: ", edgePoint, Border(edge))
 				for i := range s.Vertices {
 					if !IsInside(s.Vertices[i], Border(edge), edgePoint[0]) {
 						clipVertices = RemoveElement(clipVertices, s.Vertices[i])
-						fmt.Println("Vertice removido:  ", s.Vertices[i])
 					}
 				}
 
-				fmt.Println("Após o clipping: ", clipVertices)
-
 				s.Vertices = clipVertices
+
+				if containsTex {
+					switch Border(edge) {
+					case Top:
+						s.TextureVertices[0].Y = 1 - t
+						s.TextureVertices[1].Y = 1 - t
+					}
+				}
 			}
 		}
 
 	}
 
+	s.Vertices = RemoveDuplicates(s.Vertices)
+
+	fmt.Println("texture vertices", s.TextureVertices)
+	fmt.Println("vertices", s.Vertices)
+
 	return s
+}
+
+func RemoveDuplicates(slice []vec.Vec2D) []vec.Vec2D {
+	uniqueMap := make(map[vec.Vec2D]bool)
+	for _, item := range slice {
+		uniqueMap[item] = true
+	}
+
+	uniqueSlice := make([]vec.Vec2D, 0, len(uniqueMap))
+	for item := range uniqueMap {
+		uniqueSlice = append(uniqueSlice, item)
+	}
+
+	return uniqueSlice
 }
 
 func Contains(vertices []vec.Vec2D, point vec.Vec2D) (contains bool) {
@@ -206,8 +228,4 @@ func IsFullInsideViewport(shape *geo.GeometricShape, vp *Viewport) bool {
 
 func InsideViewport(point vec.Vec2D, vp *Viewport) bool {
 	return point.X >= vp.pi.X && point.X <= vp.pf.X && point.Y >= vp.pi.Y && point.Y <= vp.pf.Y
-}
-
-func lerp(a, b, t float64) float64 {
-	return a + (a-b)*t
 }

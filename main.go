@@ -95,9 +95,9 @@ var gopher = geo.NewRect(20, 20, center).
 	Vertices: []vec.Vec2D{{X: 400, Y: 300}, {X: 350, Y: 400}, {X: 400, Y: 500}, {X: 450, Y: 400}, {X: 400, Y: 350}},
 } */
 
-//var triangle = geo.NewRect(100, 100, vec.NewVec2D(200, 200))
+var triangle = geo.NewRect(100, 100, vec.NewVec2D(200, 200))
 
-var triangle = geo.NewTriangle(100, 100, vec.NewVec2D(200, 200))
+//var triangle = geo.NewRect(100, 100, vec.NewVec2D(200, 200))
 
 func Update(ctx *ebiten.Image) {
 
@@ -198,9 +198,7 @@ func MapObjectsToVP(vp *window.Viewport) {
 
 	triangle.Apply(func(s *geo.GeometricShape) {
 		win.MapPoints(s, vp)
-		if vp != miniMap {
-			s = window.SutherlandHodgeman(mem, s, vp)
-		}
+		s = window.SutherlandHodgeman(mem, s, vp)
 		scan.ScanlineBasic(mem, s, colors.ColorIndigo)
 	})
 
@@ -212,8 +210,8 @@ func MapObjectsToVP(vp *window.Viewport) {
 }
 
 func GenerateStars() (stars []*geo.GeometricShape) {
-	for i := 0.0; i < Width*WindowFactor; i += 20 {
-		star := geo.NewRect(5, 5, vec.NewVec2D(i, float64(rand.Intn(Height*WindowFactor)))).
+	for i := 0.0; i < Width*WindowFactor*2; i += 20 {
+		star := geo.NewRect(5, 5, vec.NewVec2D(i, float64(rand.Intn(Height*WindowFactor*2)))).
 			WithTextureVertices([]vec.Vec2D{
 				vec.Zeros(),
 				vec.NewVec2D(1, 0),
@@ -244,8 +242,8 @@ func MeteorsPositions() []vec.Vec2D {
 
 		for !isValid {
 			isValid = true
-			x = rand.Float64() * Width * WindowFactor
-			y = rand.Float64() * Height * WindowFactor
+			x = rand.Float64() * Width * WindowFactor * 2
+			y = rand.Float64() * Height * WindowFactor * 2
 
 			for j := 0; j < i; j++ {
 				if vec.Distance(points[j], vec.NewVec2D(x, y)) < MeteorsMinDist {
