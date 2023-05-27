@@ -2,6 +2,7 @@ package geo
 
 import (
 	"cg-go/src/bitmap"
+	"cg-go/src/colors"
 	"cg-go/src/memory"
 	"cg-go/src/vec"
 	"image/color"
@@ -21,12 +22,12 @@ func (s *GeometricShape) DrawBounds(mem memory.Memory) {
 	pi := s.Vertices[0]
 	for i := 1; i < len(s.Vertices); i++ {
 		pf := s.Vertices[i]
-		bitmap.BresenhamLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+		bitmap.BresenhamLine(mem, pi, pf, colors.ColorWhite)
 		pi = pf
 	}
 
 	pf := s.Vertices[0]
-	bitmap.BresenhamLine(mem, pi, pf, color.RGBA{255, 255, 255, 255})
+	bitmap.BresenhamLine(mem, pi, pf, colors.ColorWhite)
 
 }
 
