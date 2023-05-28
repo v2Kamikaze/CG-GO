@@ -27,5 +27,11 @@ func BitMapUpdate(ctx *ebiten.Image) {
 	bitmap.DrawFilledEllipse(Mem, centerEllipse, 50, 20, colors.ColorPink, colors.ColorWhite)
 	bitmap.BresenhamDrawFilledCircle(Mem, centerCircle, 50, colors.ColorWhite, colors.ColorSilver)
 
+	geo.NewTriangle(100, 100, vec.NewVec2D(Width/2+100, Height/3)).DrawBounds(Mem)
+	bitmap.FloodFill(Mem, vec.NewVec2D(Width/2+100, Height/3), colors.ColorTeal, colors.ColorWhite)
+
+	geo.NewRect(90, 30, vec.NewVec2D(Width/5, Height-100)).DrawBounds(Mem)
+	bitmap.FloodFill(Mem, vec.NewVec2D(Width/5, Height-100), colors.ColorOrange, colors.ColorWhite)
+
 	Mem.Draw(ctx)
 }

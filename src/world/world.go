@@ -87,18 +87,14 @@ var gopher = geo.NewRect(20, 20, Win.Center()).
 		vec.NewVec2D(0, 1),
 	})
 
-var pol = (&geo.GeometricShape{
-	Vertices: []vec.Vec2D{
-		{X: 50, Y: 50},
-		{X: 80, Y: 50},
-		{X: 80, Y: 80},
-		{X: 100, Y: 100},
-		{X: 70, Y: 100},
-		{X: 120, Y: 90},
-		{X: 120, Y: 60},
-		{X: 60, Y: 40},
-	},
-}).WithColors([]color.RGBA{colors.ColorYellow, colors.ColorRed, colors.ColorYellow, colors.ColorRed, colors.ColorYellow, colors.ColorRed, colors.ColorYellow, colors.ColorRed})
+var pol = MakeSum(Win.Center().Sub(vec.NewVec2D(200, 200)), 100, 20)
+
+var rect = geo.NewRect(200, 30, Win.Center().Plus(vec.NewVec2D(200, 200))).WithColors([]color.RGBA{
+	colors.ColorBlue,
+	colors.ColorRed,
+	colors.ColorRed,
+	colors.ColorBlue,
+})
 
 func MapObjectsToVP(vp *window.Viewport) {
 
@@ -133,6 +129,11 @@ func MapObjectsToVP(vp *window.Viewport) {
 	})
 
 	pol.Apply(func(s *geo.GeometricShape) {
+		Win.MapPoints(s, vp)
+		scan.ScanlineGradient(Mem, s)
+	})
+
+	rect.Apply(func(s *geo.GeometricShape) {
 		Win.MapPoints(s, vp)
 		scan.ScanlineGradient(Mem, s)
 	})
@@ -229,4 +230,22 @@ func GenerateMeteors() (meteors []*geo.GeometricShape) {
 		}))
 	}
 	return
+}
+
+func MakeSum(center vec.Vec2D, radius float64, sides int) *geo.GeometricShape {
+
+	c := make([]color.RGBA, sides)
+
+	for i := 0; i < sides; i++ {
+
+		if i%2 == 0 {
+			c[i] = colors.ColorYellow
+		} else {
+			c[i] = colors.ColorRed
+		}
+
+	}
+
+	return geo.CreateCirclePolygon(Win.Center().Sub(vec.NewVec2D(200, 200)), 100, 12).
+		WithColors(c)
 }

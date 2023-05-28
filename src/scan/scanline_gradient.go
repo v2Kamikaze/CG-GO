@@ -62,3 +62,63 @@ func ScanlineGradient(mem memory.Memory, s *geo.GeometricShape) {
 	}
 
 }
+
+func ScanlineGradient2(mem memory.Memory, s *geo.GeometricShape) {
+	if len(s.Vertices) < 3 {
+		return
+	}
+
+	ymin, ymax := vec.GetMinMaxY(s.Vertices)
+
+	for y := ymin; y <= ymax; y++ {
+		var i []ScanlinePointGradient
+
+		pi := s.Vertices[0]
+		pixelColor := s.ColorVertices[0]
+
+		for p := 1; p <= len(s.Vertices); p++ {
+			pf := s.Vertices[p%len(s.Vertices)]
+			pfColor := s.ColorVertices[p%len(s.Vertices)]
+
+			if point := Intersection(y, pi, pf); point.X >= 0 {
+				i = append(i, NewScanlinePointGradient(point.X, point.T, pixelColor))
+			}
+
+			pi = pf
+			pixelColor = pfColor
+		}
+
+		if len(i) < 2 {
+			continue
+		}
+
+		for pi := 0; pi < len(i); pi++ {
+			point1 := i[pi]
+			point2 := i[(pi+1)%len(i)]
+
+			if point1.X == point2.X {
+				continue
+			}
+
+			startX, endX := point1.X, point2.X
+			startT, endT := point1.T, point2.T
+			startColor, endColor := point1.Color, point2.Color
+
+			if startX > endX {
+				startX, endX = endX, startX
+				startT, endT = endT, startT
+				startColor, endColor = endColor, startColor
+			}
+
+			for x := startX; x <= endX; x++ {
+				ratio := float64(x-startX) / float64(endX-startX)
+				smoothRatio := startT + (endT-startT)*ratio
+
+				// Interpolação das cores
+				interpolatedColor := colors.InterpolateColors(startColor, endColor, smoothRatio)
+
+				mem.SetPixel(x, y, interpolatedColor)
+			}
+		}
+	}
+}

@@ -58,5 +58,5 @@ func ShapesUpdate(ctx *ebiten.Image) {
 	transform.RotateVerticesOnPivot(0.5, ice.Center(), ice)
 	transform.RotateVerticesOnPivot(2, lava.Center(), baren)
 	transform.TranslateVertices(vec.NewVec2D(10, 5), shootingStar)
-
+	transform.TranslateVertices(vec.NewVec2D(0, 1), rect)
 }

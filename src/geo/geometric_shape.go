@@ -6,6 +6,7 @@ import (
 	"cg-go/src/memory"
 	"cg-go/src/vec"
 	"image/color"
+	"math"
 )
 
 type GeometricShape struct {
@@ -62,6 +63,10 @@ func NewTriangle(base, height float64, center vec.Vec2D) *GeometricShape {
 	}
 }
 
+func NewShape(vertices []vec.Vec2D) *GeometricShape {
+	return &GeometricShape{Vertices: vertices}
+}
+
 func Copy(s *GeometricShape) *GeometricShape {
 	v := make([]vec.Vec2D, len(s.Vertices))
 	cv := make([]color.RGBA, len(s.ColorVertices))
@@ -96,4 +101,20 @@ func (s *GeometricShape) Center() vec.Vec2D {
 func (s *GeometricShape) Apply(f func(s *GeometricShape)) {
 	cp := Copy(s)
 	f(cp)
+}
+
+func CreateCirclePolygon(center vec.Vec2D, radius float64, sides int) *GeometricShape {
+	// Calcula o ângulo de cada lado do polígono
+	angle := 2 * math.Pi / float64(sides)
+
+	// Cria os vértices do polígono
+	vertices := make([]vec.Vec2D, sides)
+	for i := 0; i < sides; i++ {
+		x := center.X + radius*math.Cos(float64(i)*angle)
+		y := center.Y + radius*math.Sin(float64(i)*angle)
+		vertices[i] = vec.NewVec2D(x, y)
+	}
+
+	// Cria e retorna o polígono
+	return NewShape(vertices)
 }
