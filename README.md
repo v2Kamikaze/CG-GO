@@ -1,4 +1,4 @@
-# Alunos: Carlos Victor Torres Rufino e Pedro Paulo Pereira da Silva
+# Alunos: Carlos Victor Torres Rufino
 # Para rodar o projeto:
 ## Compilador do Go: https://go.dev/learn/
 # Após instalar o compilador, no diretório do projeto:
