@@ -87,7 +87,7 @@ var gopher = geo.NewRect(20, 20, Win.Center()).
 		vec.NewVec2D(0, 1),
 	})
 
-var pol = MakeSum(Win.Center().Sub(vec.NewVec2D(200, 200)), 100, 20)
+var pol = MakeSun(Win.Center().Sub(vec.NewVec2D(200, 200)), 100, 20)
 
 var rect = geo.NewRect(200, 30, Win.Center().Plus(vec.NewVec2D(200, 200))).WithColors([]color.RGBA{
 	colors.ColorBlue,
@@ -232,7 +232,7 @@ func GenerateMeteors() (meteors []*geo.GeometricShape) {
 	return
 }
 
-func MakeSum(center vec.Vec2D, radius float64, sides int) *geo.GeometricShape {
+func MakeSun(center vec.Vec2D, radius float64, sides int) *geo.GeometricShape {
 
 	c := make([]color.RGBA, sides)
 
